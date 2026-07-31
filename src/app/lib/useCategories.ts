@@ -57,6 +57,27 @@ export function useSubcategoriesWithCounts(parentSlug?: string) {
   return { subcategories, loading };
 }
 
+import {
+  customizedHeater,
+  controlPanel,
+  dTypeHeater,
+  openWire,
+  standardHeater,
+  cartridgeHeater,
+} from "../data/categoryProducts";
+
+function getCategoryFallbackImage(slug: string) {
+  if (!slug) return null;
+  const s = slug.toLowerCase();
+  if (s.includes('customized')) return customizedHeater;
+  if (s.includes('control')) return controlPanel;
+  if (s.includes('d-type')) return dTypeHeater;
+  if (s.includes('open-wire') || s.includes('open wire')) return openWire;
+  if (s.includes('std') || s.includes('standard')) return standardHeater;
+  if (s.includes('cartridge')) return cartridgeHeater;
+  return null;
+}
+
 export function useCategories() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +92,7 @@ export function useCategories() {
           setCategories(data.map((c: any) => ({
             ...c,
             id: c.slug, // keep the slug as `.id` so existing routing/equality checks still work
-            image: c.image_url,
+            image: c.image_url || getCategoryFallbackImage(c.slug),
             category: c.category_label,
             shortDescription: c.short_description,
             specs: (c.category_specs ?? []).sort((a: any, b: any) => a.sort_order - b.sort_order).map((s: any) => s.value),
@@ -105,7 +126,7 @@ export function useCategoryBySlug(slug?: string) {
       setCategory({
         ...cat,
         id: cat.slug, // same reasoning as above
-        image: cat.image_url,
+        image: cat.image_url || getCategoryFallbackImage(cat.slug),
         category: cat.category_label,
         specs: (specs ?? []).map((s: any) => s.value),
         specifications: specifications ?? [], // already {label, value} — no JSX change needed
@@ -164,10 +185,18 @@ export function useSubcategoryProducts(categorySlug?: string, subSlug?: string) 
         .order("sort_order");
 
       if (isMounted) {
-        setProducts((data ?? []).map((product: any) => ({
-          ...product,
-          image: product.image_url || product.image || null,
-        })));
+        setProducts((data ?? []).map((product: any, index: number) => {
+          const localProducts = categoryProducts[subSlug] || [];
+          // Try to match by name first, otherwise fallback to index, then null
+          const localMatch = localProducts.find(p => p.name.trim().toLowerCase() === product.name.trim().toLowerCase()) 
+                          || localProducts[index];
+          const fallbackImage = localMatch ? localMatch.image : null;
+
+          return {
+            ...product,
+            image: product.image_url || fallbackImage,
+          };
+        }));
         setLoading(false);
       }
     })();
