@@ -43,7 +43,7 @@ export function useSubcategoriesWithCounts(parentSlug?: string) {
         .eq("category_id", parent.id)
         .order("sort_order");
       setSubcategories((data ?? []).map((s: any) => {
-        const fallbackImage = categoryProducts[s.slug]?.[0]?.image || null;
+        const fallbackImage = subcategoryFallbackImages[s.slug] || categoryProducts[s.slug]?.[0]?.image || null;
         return {
           ...s,
           image_url: getValidImageUrl(s.image_url, fallbackImage),
@@ -64,6 +64,7 @@ import {
   openWire,
   standardHeater,
   cartridgeHeater,
+  subcategoryFallbackImages,
 } from "../data/categoryProducts";
 
 function getCategoryFallbackImage(slug: string) {

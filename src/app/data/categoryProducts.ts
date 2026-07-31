@@ -58,6 +58,26 @@ import powderDryer         from "../../imports/powderdryer.png";
 import roomHeater         from "../../imports/roomHeater.png";
 import aluCasted         from "../../imports/Alu casted.png";
 
+import beltDryer from "../../imports/belt dryer.png";
+import cipChemical from "../../imports/CIP chemical.png";
+import hnx from "../../imports/HNX.png";
+import lpgPropane from "../../imports/LPG and Propane.png";
+import syngas from "../../imports/syngas.png";
+import reactor from "../../imports/reactor heater.png";
+import space from "../../imports/space heater.png";
+import alkaline from "../../imports/alkaline heaters.png";
+
+export const subcategoryFallbackImages: Record<string, string> = {
+  "belt-dryer": beltDryer,
+  "cip-chemical-heating": cipChemical,
+  "hnx-nitrogen-heaters": hnx,
+  "lpg-propane-evaporators": lpgPropane,
+  "syngas-heaters": syngas,
+  "reactor-heater": reactor,
+  "space-heaters": space,
+  "std-alkaline": alkaline,
+  "std-chemical": chemicalHeater,
+};
 export const categoryProducts: Record<
   string,
   Array<{ name: string; image: string; description: string; category?: string }>
