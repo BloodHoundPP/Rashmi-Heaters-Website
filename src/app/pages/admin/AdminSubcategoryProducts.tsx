@@ -6,6 +6,8 @@ import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
 import { ImageWithFallback } from "../../components/figma/ImageWithFallback";
+import { Upload } from "lucide-react";
+import { Link } from "react-router";
 
 type Product = { id?: string; name: string; image_url: string; description: string; subcategory_id?: string; sort_order?: number; category_label?: string };
 
@@ -62,12 +64,20 @@ export function AdminSubcategoryProducts() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Products in this Subcategory</h1>
-        <Button onClick={() => setEditing({ name: "", image_url: "", description: "" })}>+ Add Product</Button>
+    <div className="p-4 md:p-6 space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold">Products in this Subcategory</h1>
+        </div>
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <Link to={`/admin/categories/${categoryId}/subcategories`} className="flex-1 sm:flex-none">
+            <Button variant="outline" className="w-full sm:w-auto">← Back to Subcategories</Button>
+          </Link>
+          <Button className="flex-1 sm:flex-none" onClick={() => setEditing({ name: "", image_url: "", description: "" })}>+ Add Product</Button>
+        </div>
       </div>
 
+      <div className="overflow-x-auto w-full border rounded-md">
       <Table>
         <TableHeader>
           <TableRow>
@@ -97,24 +107,36 @@ export function AdminSubcategoryProducts() {
           ))}
         </TableBody>
       </Table>
+      </div>
 
       {editing && (
-        <div className="border rounded-lg p-4 max-w-md space-y-3">
+        <div className="border rounded-lg p-4 max-w-full md:max-w-xl space-y-4">
           <h3 className="font-medium">{editing.id ? "Edit" : "New"} Product</h3>
           <Input placeholder="Name" value={editing.name}
             onChange={(e) => setEditing({ ...editing, name: e.target.value })} />
           <Textarea placeholder="Description" value={editing.description}
             onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
-          {editing.image_url ? (
-            <ImageWithFallback src={editing.image_url} alt={editing.name || "Product preview"} className="w-24 h-24 object-cover rounded" />
-          ) : (
-            <div className="w-24 h-24 rounded bg-muted flex items-center justify-center text-sm text-muted-foreground">No image</div>
-          )}
-          <input type="file" accept="image/*" disabled={uploading}
-            onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
-          <div className="flex gap-2">
-            <Button onClick={handleSave}>Save</Button>
-            <Button variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
+          
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Image</label>
+            {editing.image_url ? (
+              <ImageWithFallback src={editing.image_url} alt={editing.name || "Product preview"} className="w-24 h-24 object-cover rounded border" />
+            ) : (
+              <div className="w-24 h-24 rounded bg-muted flex items-center justify-center text-sm text-muted-foreground border">No image</div>
+            )}
+            <div>
+              <input type="file" id="prod-image-upload" className="hidden" accept="image/*" disabled={uploading}
+                onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
+              <label htmlFor="prod-image-upload" className="cursor-pointer inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 mt-2">
+                <Upload className="w-4 h-4 mr-2" />
+                {uploading ? "Uploading..." : "Choose Image"}
+              </label>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2 pt-2">
+            <Button onClick={handleSave} className="flex-1 sm:flex-none">Save</Button>
+            <Button variant="outline" onClick={() => setEditing(null)} className="flex-1 sm:flex-none">Cancel</Button>
           </div>
         </div>
       )}
