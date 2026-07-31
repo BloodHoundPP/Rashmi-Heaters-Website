@@ -1,0 +1,13 @@
+# Node modules
+node_modules/
+
+# Environment files (sensitive)
+.env
+.env.*
+
+# Local environment overrides and migration envs
+.env.local
+.env.migration
+
+# Build output
+/dist/
