@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router";
 import { X, MapPin, Calendar, ArrowRight, Package } from "lucide-react";
 
 export function ExpoPopup() {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     // Small delay so the page renders first
@@ -19,7 +17,6 @@ export function ExpoPopup() {
   };
 
   if (!visible) return null;
-  if (location.pathname.startsWith("/admin")) return null;
 
   return (
     <div
