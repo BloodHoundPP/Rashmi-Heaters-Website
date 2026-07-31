@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router";
 import { X, MapPin, Calendar, ArrowRight, Package } from "lucide-react";
 
 export function ExpoPopup() {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     // Small delay so the page renders first
@@ -17,6 +19,7 @@ export function ExpoPopup() {
   };
 
   if (!visible) return null;
+  if (location.pathname.startsWith("/admin")) return null;
 
   return (
     <div
@@ -60,7 +63,7 @@ export function ExpoPopup() {
         </button>
 
         {/* Header */}
-        <div className="px-8 pt-7 pb-5">
+        <div className="px-5 sm:px-8 pt-5 sm:pt-7 pb-5">
           {/* Expo badge */}
           <div className="flex items-center gap-2 mb-4">
             <span
@@ -71,11 +74,11 @@ export function ExpoPopup() {
             </span>
           </div>
 
-          <h2 className="text-2xl font-black leading-tight mb-1 text-slate-700">
+          <h2 className="text-xl sm:text-2xl font-black leading-tight mb-1 text-slate-700">
             Meet Rashmi Heaters at
           </h2>
           <h2
-            className="text-3xl font-black leading-tight mb-5"
+            className="text-2xl sm:text-3xl font-black leading-tight mb-5"
             style={{
               background: "linear-gradient(90deg, #C62828, #ef5350, #C62828)",
               WebkitBackgroundClip: "text",
@@ -93,7 +96,7 @@ export function ExpoPopup() {
             <img
               src="https://india.boilerworldexpo.com/wp-content/uploads/2025/06/BI26-tentative-logo.png"
               alt="Boiler India 2026"
-              className="max-h-20 object-contain"
+              className="max-h-16 sm:max-h-20 object-contain"
             />
           </div>
 
@@ -115,13 +118,13 @@ export function ExpoPopup() {
           </div>
 
           {/* Description */}
-          <p className="text-sm leading-relaxed mb-5 text-slate-500">
+          <p className="text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 text-slate-500">
             Discover our latest industrial heating solutions, custom-engineered heating elements,
             and innovative temperature control technologies.
           </p>
 
           {/* Highlights */}
-          <div className="grid grid-cols-2 gap-2 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-5 sm:mb-6">
             {[
               "Live Product Demonstrations",
               "Meet Our Technical Experts",
@@ -136,7 +139,7 @@ export function ExpoPopup() {
           </div>
 
           {/* CTAs */}
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <a
               href="https://india.boilerworldexpo.com/"
               target="_blank"
