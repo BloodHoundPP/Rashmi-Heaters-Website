@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
+import { categoryProducts } from "../data/categoryProducts";
+
 // add to src/app/lib/useCategories.ts
 export function useSubcategoryProductCounts(subSlugs: string[]) {
   const [counts, setCounts] = useState<Record<string, number>>({});
@@ -40,7 +42,14 @@ export function useSubcategoriesWithCounts(parentSlug?: string) {
         .select("id, slug, name, image_url, description, products(count)")
         .eq("category_id", parent.id)
         .order("sort_order");
-      setSubcategories((data ?? []).map((s: any) => ({ ...s, productCount: s.products?.[0]?.count ?? 0 })));
+      setSubcategories((data ?? []).map((s: any) => {
+        const fallbackImage = categoryProducts[s.slug]?.[0]?.image || null;
+        return {
+          ...s,
+          image_url: s.image_url || fallbackImage,
+          productCount: s.products?.[0]?.count ?? 0,
+        };
+      }));
       setLoading(false);
     })();
   }, [parentSlug]);

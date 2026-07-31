@@ -527,7 +527,7 @@ export {
   standardHeater,
   cartridgeHeater,
   wireAnnealingHeater,
-  powderCoatingOvenHeater,
+  
   inlineHotAirGenerator,
   airHeaterBankSprayDryer,
   finnedHeaterHVAC,

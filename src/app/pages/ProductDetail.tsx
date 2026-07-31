@@ -167,7 +167,7 @@ export function ProductDetail() {
             </div>
           </div>
 
-          {subcategories.length > 0 && (
+          {(loadingSubcategories || subcategories.length > 0) && (
             <div className="mb-16">
               <h2 className="text-3xl font-bold text-foreground mb-4">Explore Related Options</h2>
               <p className="text-muted-foreground mb-8">
