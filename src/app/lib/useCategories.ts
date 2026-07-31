@@ -46,7 +46,7 @@ export function useSubcategoriesWithCounts(parentSlug?: string) {
         const fallbackImage = categoryProducts[s.slug]?.[0]?.image || null;
         return {
           ...s,
-          image_url: s.image_url || fallbackImage,
+          image_url: getValidImageUrl(s.image_url, fallbackImage),
           productCount: s.products?.[0]?.count ?? 0,
         };
       }));
@@ -78,6 +78,15 @@ function getCategoryFallbackImage(slug: string) {
   return null;
 }
 
+function getValidImageUrl(dbUrl: string | null | undefined, fallback: string | null) {
+  if (!dbUrl) return fallback;
+  // If the database URL is a raw local path inserted by mistake during migration
+  if (dbUrl.includes("imports/") || dbUrl.startsWith(".") || dbUrl.startsWith("/src/")) {
+    return fallback;
+  }
+  return dbUrl;
+}
+
 export function useCategories() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -92,7 +101,7 @@ export function useCategories() {
           setCategories(data.map((c: any) => ({
             ...c,
             id: c.slug, // keep the slug as `.id` so existing routing/equality checks still work
-            image: c.image_url || getCategoryFallbackImage(c.slug),
+            image: getValidImageUrl(c.image_url, getCategoryFallbackImage(c.slug)),
             category: c.category_label,
             shortDescription: c.short_description,
             specs: (c.category_specs ?? []).sort((a: any, b: any) => a.sort_order - b.sort_order).map((s: any) => s.value),
@@ -126,7 +135,7 @@ export function useCategoryBySlug(slug?: string) {
       setCategory({
         ...cat,
         id: cat.slug, // same reasoning as above
-        image: cat.image_url || getCategoryFallbackImage(cat.slug),
+        image: getValidImageUrl(cat.image_url, getCategoryFallbackImage(cat.slug)),
         category: cat.category_label,
         specs: (specs ?? []).map((s: any) => s.value),
         specifications: specifications ?? [], // already {label, value} — no JSX change needed
@@ -194,7 +203,7 @@ export function useSubcategoryProducts(categorySlug?: string, subSlug?: string) 
 
           return {
             ...product,
-            image: product.image_url || fallbackImage,
+            image: getValidImageUrl(product.image_url, fallbackImage),
           };
         }));
         setLoading(false);
