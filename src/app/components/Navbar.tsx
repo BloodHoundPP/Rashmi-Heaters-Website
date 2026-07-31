@@ -302,14 +302,13 @@ export function Navbar() {
               <img
                 src={rashmiLogoImg}
                 alt="Rashmi Heaters Logo"
-                className="h-18 w-auto object-contain"
+                className="h-10 sm:h-12 md:h-18 w-auto object-contain"
               />
               <div className="flex flex-col leading-tight">
                 <span
-                  className="text-white font-bold tracking-wide"
+                  className="text-white font-bold tracking-wide text-[1rem] sm:text-xl md:text-2xl lg:text-[1.5rem]"
                   style={{
-                    fontSize: "1.5rem",
-                    letterSpacing: "0.07em",
+                    letterSpacing: "0.05em",
                   }}
                 >
                   RASHMI HEATERS PVT. LTD.
@@ -457,7 +456,7 @@ export function Navbar() {
 
             {/* Mobile toggle */}
             <button
-              className="md:hidden text-white"
+              className="md:hidden text-white shrink-0 ml-2"
               onClick={() => setMobileOpen(!isMobileOpen)}
             >
               {isMobileOpen ? (

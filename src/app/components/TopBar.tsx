@@ -579,7 +579,7 @@ export function TopBar() {
         <div className="max-w-[1320px] mx-auto px-6">
           <div className="flex items-center justify-between h-12 text-sm">
             {/* Left — cert logos */}
-            <div className="flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-2">
               {certLogos.map((c) => (
                 <div
                   key={c.alt}
@@ -611,7 +611,7 @@ export function TopBar() {
             </div>
 
             {/* Center — contact */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 ml-0 lg:ml-auto">
               {/* Phone */}
               <a
                 href="tel:+919822946344"
@@ -641,7 +641,7 @@ export function TopBar() {
               {/* Email */}
               <a
                 href="mailto:sales@rashmiheaters.com"
-                className="flex items-center gap-1.5 text-gray-600 hover:text-primary transition-colors"
+                className="hidden sm:flex items-center gap-1.5 text-gray-600 hover:text-primary transition-colors"
               >
                 <Mail size={12} className="text-primary" />
                 <span className="hidden sm:inline text-xs">sales@rashmiheaters.com</span>
@@ -649,17 +649,17 @@ export function TopBar() {
             </div>
 
             {/* Right — Locations + Translate */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 ml-auto lg:ml-0">
               {/* Locations We Serve */}
               <button
                 onClick={() => setShowLocations(true)}
-                className="flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors border border-primary/30 hover:border-primary/60 rounded-full px-3 py-1 bg-primary/5 hover:bg-primary/10"
+                className="flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors border border-primary/30 hover:border-primary/60 rounded-full px-2 sm:px-3 py-1 bg-primary/5 hover:bg-primary/10"
               >
-                <MapPin size={12} />
+                <MapPin size={14} className="sm:w-3 sm:h-3" />
                 <span className="hidden sm:inline">
                   Locations We Serve
                 </span>
-                <ChevronDown size={11} />
+                <ChevronDown size={11} className="hidden sm:inline" />
               </button>
 
               {/* Google Translate */}
