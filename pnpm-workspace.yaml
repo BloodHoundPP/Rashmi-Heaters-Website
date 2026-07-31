@@ -1,6 +1,8 @@
 packages: 
 - '.'
 minimumReleaseAge: 0
-enableBuildScriptsOnAllPackages: true
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - esbuild
 
   
