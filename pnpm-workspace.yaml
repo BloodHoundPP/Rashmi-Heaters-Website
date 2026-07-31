@@ -1,4 +1,5 @@
-packages: - '.'
+packages: 
+- '.'
 minimumReleaseAge: 0
 enableBuildScriptsOnAllPackages: true
 
