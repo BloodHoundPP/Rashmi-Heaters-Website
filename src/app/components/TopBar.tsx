@@ -7,6 +7,7 @@ import {
   ChevronDown,
   Globe,
 } from "lucide-react";
+import { Link } from "react-router";
 
 function WhatsAppIcon({ size = 13 }: { size?: number }) {
   return (
@@ -639,17 +640,17 @@ export function TopBar() {
               <span className="text-gray-200 text-xs">|</span>
 
               {/* Email */}
-              <a
-                href="mailto:sales@rashmiheaters.com"
-                className="hidden sm:flex items-center gap-1.5 text-gray-600 hover:text-primary transition-colors"
+              <Link
+                to="/contact"
+                className="flex items-center gap-1.5 text-gray-600 hover:text-primary transition-colors"
               >
                 <Mail size={12} className="text-primary" />
                 <span className="hidden sm:inline text-xs">sales@rashmiheaters.com</span>
-              </a>
+              </Link>
             </div>
 
             {/* Right — Locations + Translate */}
-            <div className="flex items-center gap-2 sm:gap-3 ml-auto lg:ml-0">
+            <div className="flex items-center gap-2 sm:gap-4 ml-4 sm:ml-6 lg:ml-6">
               {/* Locations We Serve */}
               <button
                 onClick={() => setShowLocations(true)}
