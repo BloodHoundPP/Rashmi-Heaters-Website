@@ -1,4 +1,4 @@
-import { Calendar, Bell, MapPin, ArrowRight, CheckCircle2, Clock } from "lucide-react";
+import { Calendar, MapPin, ArrowRight, CheckCircle2, Clock } from "lucide-react";
 
 export function Blogs() {
   return (
@@ -34,9 +34,9 @@ export function Blogs() {
           <div
             className="relative rounded-3xl overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, #B4E1EB 0%, #B4E1EB 50%, #B4E1EB 100%)",
-              border: "1px solid rgba(201,169,97,0.25)",
-              boxShadow: "0 8px 48px rgba(201,169,97,0.1), 0 2px 8px rgba(0,0,0,0.3)",
+              background: "#ffffff",
+              border: "1px solid rgba(0,0,0,0.1)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)",
             }}
           >
             {/* Gold top accent */}
@@ -50,7 +50,7 @@ export function Blogs() {
               <div className="p-10 lg:p-12">
                 {/* Badge */}
                 <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 mb-6 text-[11px] font-black tracking-widest uppercase"
-                  style={{ background: "#C41E3A", color: "#000" }}>
+                  style={{ background: "#C41E3A", color: "#FFF" }}>
                   🏭 We're Exhibiting!
                 </div>
 
@@ -63,7 +63,7 @@ export function Blogs() {
                 <h2
                   className="text-4xl lg:text-5xl font-black leading-tight mb-8"
                   style={{
-                    background: "linear-gradient(90deg, #C9A961, #F5E6C8, #C9A961)",
+                    background: "linear-gradient(90deg, #8A6D3B, #C9A961, #8A6D3B)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -76,45 +76,45 @@ export function Blogs() {
                   <div className="flex items-center gap-3">
                     <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: "rgba(201,169,97,0.15)" }}
+                      style={{ background: "rgba(201,169,97,0.1)" }}
                     >
-                      <Calendar size={15} style={{ color: "#C9A961" }} />
+                      <Calendar size={15} style={{ color: "#8A6D3B" }} />
                     </div>
                     <div>
-                      <p className="text-[11px] uppercase tracking-widest mb-0.5" style={{ color: "rgba(245,230,200,0.45)" }}>Date</p>
-                      <p className="text-sm font-bold" style={{ color: "#F5E6C8" }}>8 – 10 October 2026</p>
+                      <p className="text-[11px] uppercase tracking-widest mb-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>Date</p>
+                      <p className="text-sm font-bold" style={{ color: "#000" }}>8 – 10 October 2026</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                      style={{ background: "rgba(201,169,97,0.15)" }}
+                      style={{ background: "rgba(201,169,97,0.1)" }}
                     >
-                      <MapPin size={15} style={{ color: "#C9A961" }} />
+                      <MapPin size={15} style={{ color: "#8A6D3B" }} />
                     </div>
                     <div>
-                      <p className="text-[11px] uppercase tracking-widest mb-0.5" style={{ color: "rgba(245,230,200,0.45)" }}>Venue</p>
-                      <p className="text-sm font-bold leading-snug" style={{ color: "#F5E6C8" }}>
+                      <p className="text-[11px] uppercase tracking-widest mb-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>Venue</p>
+                      <p className="text-sm font-bold leading-snug" style={{ color: "#000" }}>
                         CIDCO Exhibition & Convention Centre,<br />
-                        <span className="font-normal" style={{ color: "rgba(245,230,200,0.7)" }}>Navi Mumbai, India</span>
+                        <span className="font-normal" style={{ color: "rgba(0,0,0,0.7)" }}>Navi Mumbai, India</span>
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: "rgba(201,169,97,0.15)" }}
+                      style={{ background: "rgba(201,169,97,0.1)" }}
                     >
-                      <Clock size={15} style={{ color: "#C9A961" }} />
+                      <Clock size={15} style={{ color: "#8A6D3B" }} />
                     </div>
                     <div>
-                      <p className="text-[11px] uppercase tracking-widest mb-0.5" style={{ color: "rgba(245,230,200,0.45)" }}>Timing</p>
-                      <p className="text-sm font-bold" style={{ color: "#F5E6C8" }}>10:00 AM – 6:00 PM Daily</p>
+                      <p className="text-[11px] uppercase tracking-widest mb-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>Timing</p>
+                      <p className="text-sm font-bold" style={{ color: "#000" }}>10:00 AM – 6:00 PM Daily</p>
                     </div>
                   </div>
                 </div>
 
-                <p className="text-sm leading-relaxed mb-8" style={{ color: "rgba(245,230,200,0.6)" }}>
+                <p className="text-sm leading-relaxed mb-8" style={{ color: "rgba(0,0,0,0.7)" }}>
                   Discover our latest industrial heating solutions, custom-engineered heating
                   elements, and innovative temperature control technologies at India's premier
                   boiler and thermal energy exhibition.
@@ -129,8 +129,8 @@ export function Blogs() {
                     "Business & Dealer Enquiries",
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-2">
-                      <CheckCircle2 size={14} className="shrink-0 mt-0.5" style={{ color: "#C9A961" }} />
-                      <span className="text-xs leading-snug" style={{ color: "rgba(245,230,200,0.7)" }}>
+                      <CheckCircle2 size={14} className="shrink-0 mt-0.5" style={{ color: "#8A6D3B" }} />
+                      <span className="text-xs leading-snug" style={{ color: "rgba(0,0,0,0.8)" }}>
                         {item}
                       </span>
                     </div>
@@ -145,8 +145,8 @@ export function Blogs() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-opacity hover:opacity-90"
                     style={{
-                      background: "linear-gradient(135deg, #C9A961, #D4AF37)",
-                      color: "#1a0a00",
+                      background: "linear-gradient(135deg, #8A6D3B, #C9A961)",
+                      color: "#FFF",
                     }}
                   >
                     Visit Expo Website
@@ -154,11 +154,11 @@ export function Blogs() {
                   </a>
                   <a
                     href="/contact"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-colors hover:bg-black/5"
                     style={{
-                      background: "rgba(255,255,255,0.07)",
-                      border: "1px solid rgba(201,169,97,0.25)",
-                      color: "#C9A961",
+                      background: "transparent",
+                      border: "1px solid rgba(0,0,0,0.15)",
+                      color: "#000",
                     }}
                   >
                     Book a Meeting
@@ -169,7 +169,7 @@ export function Blogs() {
               {/* Right — expo logo + decorative */}
               <div
                 className="relative flex flex-col items-center justify-center p-10 lg:p-12"
-                style={{ borderLeft: "1px solid rgba(201,169,97,0.1)" }}
+                style={{ borderLeft: "1px solid rgba(0,0,0,0.05)" }}
               >
                 {/* Glowing ring */}
                 <div
@@ -179,7 +179,7 @@ export function Blogs() {
                   <div
                     className="w-80 h-80 rounded-full"
                     style={{
-                      background: "radial-gradient(ellipse, rgba(201,169,97,0.08) 0%, transparent 70%)",
+                      background: "radial-gradient(ellipse, rgba(0,0,0,0.02) 0%, transparent 70%)",
                     }}
                   />
                 </div>
@@ -188,8 +188,8 @@ export function Blogs() {
                 <div
                   className="relative z-10 rounded-2xl p-8 flex items-center justify-center mb-8 w-full max-w-xs"
                   style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(201,169,97,0.2)",
+                    background: "rgba(0,0,0,0.02)",
+                    border: "1px solid rgba(0,0,0,0.05)",
                   }}
                 >
                   <img
@@ -211,17 +211,17 @@ export function Blogs() {
                       key={s.label}
                       className="rounded-xl px-4 py-3 text-center"
                       style={{
-                        background: "rgba(255,255,255,0.05)",
-                        border: "1px solid rgba(201,169,97,0.15)",
+                        background: "rgba(0,0,0,0.02)",
+                        border: "1px solid rgba(0,0,0,0.05)",
                       }}
                     >
                       <p
                         className="text-xl font-black mb-0.5"
-                        style={{ color: "#C9A961" }}
+                        style={{ color: "#000" }}
                       >
                         {s.value}
                       </p>
-                      <p className="text-[10px] uppercase tracking-wider" style={{ color: "rgba(245,230,200,0.45)" }}>
+                      <p className="text-[10px] uppercase tracking-wider" style={{ color: "rgba(0,0,0,0.5)" }}>
                         {s.label}
                       </p>
                     </div>
@@ -239,25 +239,46 @@ export function Blogs() {
         </div>
       </section>
 
-      {/* ── More events placeholder ── */}
+      {/* ── Exhibitions Till Now ── */}
       <section className="pb-24">
         <div className="max-w-[1320px] mx-auto px-6">
           <div className="flex items-center gap-3 mb-10">
             <div className="flex-1 h-px bg-border" />
             <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-2 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-sm text-primary font-semibold">More Events Coming Soon</span>
+              <span className="w-2 h-2 rounded-full bg-primary" />
+              <span className="text-sm text-primary font-semibold">Exhibitions Till Now</span>
             </div>
             <div className="flex-1 h-px bg-border" />
           </div>
 
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 border-2 border-primary/20 mb-4">
-              <Bell className="text-primary" size={32} strokeWidth={1.5} />
-            </div>
-            <p className="text-muted-foreground">
-              We're working on more exciting events, exhibitions, and technical seminars. Check back soon!
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[
+              { img: "/images/exhibitions/e10.jpg", title: "Industrial Expo Ankleshwar 2022" },
+              { img: "/images/exhibitions/e9.jpg", title: "Dahej Industrial Expo 2021" },
+              { img: "/images/exhibitions/e1.webp", title: "IFEX 2020 : Tamil Nadu" },
+              { img: "/images/exhibitions/e3.webp", title: "IFEX 2020 : Tamil Nadu" },
+              { img: "/images/exhibitions/e4.jpg", title: "IFEX 2020 : Tamil Nadu" },
+              { img: "/images/exhibitions/e5.jpg", title: "IFEX 2019 : NOIDA" },
+              { img: "/images/exhibitions/e7.jpg", title: "IFEX 2017 : GANDHINAGAR" },
+              { img: "/images/exhibitions/e8.jpg", title: "ELECRAMA 2016 : BANGLORE" },
+            ].map((expo, idx) => (
+              <div 
+                key={idx}
+                className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card transition-colors shadow-sm hover:shadow-md"
+              >
+                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                  <img 
+                    src={expo.img} 
+                    alt={expo.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-4 text-center border-t border-border/50">
+                  <h3 className="font-semibold text-foreground text-sm line-clamp-2">{expo.title}</h3>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
