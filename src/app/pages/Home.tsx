@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Award,
   Users,
@@ -19,7 +19,13 @@ import {
   Globe,
   Settings,
   Eye,
-  SmilePlus
+  SmilePlus,
+  RotateCw,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Maximize
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
@@ -44,8 +50,11 @@ import cartridgeHeaterImg from "../../imports/cat-cartaige-heater.png";
 import dTypeImg from "../../imports/d-type.png";
 import standardHeaterImg from "../../imports/std_card.png";
 
+
+
 export function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -58,7 +67,6 @@ export function Home() {
       video.pause();
     };
   }, []);
-
   const heroImages = [
     {
       src: heroImage1,
@@ -115,10 +123,10 @@ export function Home() {
       description: "Our Open Wire Heaters are designed for fast, efficient, and uniform heating in industrial applications. Manufactured using high quality resistance wire and durable ceramic insulators, these heaters provide excellent thermal performance with low power consumption.",
       image: openWireImg,
     },
-    
-    
-    
-    
+
+
+
+
   ];
 
   const industries = [
@@ -240,7 +248,7 @@ export function Home() {
                 { icon: "✦", text: "Quality Service" },
                 { icon: "⚡", text: "Quick Response and Offers" },
                 { icon: "✦", text: "Technical Solutions with customised designs" },
-               
+
                 { icon: "⚡", text: "35+ Years of Experience" },
                 { icon: "⚡", text: "All Industrial hubs Across India" },
                 { icon: "✦", text: "5000+ Happy Clients" },
@@ -279,7 +287,7 @@ export function Home() {
       <section className="relative min-h-screen flex items-center pt-20 pb-32 overflow-hidden hidden">
         {/* Background with gradient overlay and texture */}
         <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/20 to-background"></div>
-        
+
         {/* Grid texture pattern */}
         <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]">
           <div className="absolute inset-0" style={{
@@ -290,7 +298,7 @@ export function Home() {
             backgroundSize: '40px 40px'
           }}></div>
         </div>
-        
+
         {/* Dot texture pattern */}
         <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]">
           <div className="absolute inset-0" style={{
@@ -298,17 +306,17 @@ export function Home() {
             backgroundSize: '30px 30px'
           }}></div>
         </div>
-        
+
         {/* Gradient blobs */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 right-20 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 left-20 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
         </div>
-        
+
         {/* Curved bottom border */}
         <div className="absolute bottom-0 left-0 right-0 text-background">
           <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="currentColor"/>
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="currentColor" />
           </svg>
         </div>
 
@@ -320,11 +328,11 @@ export function Home() {
                 <Award className="text-primary" size={18} />
                 <span className="text-sm text-primary">ISO 9001:2015 Certified</span>
               </div>
-              
+
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
                 Industrial Heater Manufacturer & Custom Heating Solutions in India
               </h1>
-              
+
               <p className="text-xl text-muted-foreground max-w-xl">
                 From standard heating elements to fully customized industrial heating systems, we deliver energy-efficient, reliable, and application-specific solutions tailored to your process requirements.
               </p>
@@ -363,7 +371,7 @@ export function Home() {
                     <div className="text-sm text-muted-foreground">Clients</div>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                     <Globe className="text-primary" size={24} />
@@ -373,8 +381,8 @@ export function Home() {
                     <div className="text-sm text-muted-foreground">Exported Globally</div>
                   </div>
                 </div>
-               
-                
+
+
               </div>
             </div>
 
@@ -397,10 +405,10 @@ export function Home() {
         {/* Curved top border */}
         <div className="absolute top-0 left-0 right-0 text-card/50 -translate-y-[1px]">
           <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <path d="M0 0L60 5C120 10 240 20 360 23.3C480 26.7 600 23.3 720 20C840 16.7 960 13.3 1080 13.3C1200 13.3 1320 16.7 1380 18.3L1440 20V60H1380C1320 60 1200 60 1080 60C960 60 840 60 720 60C600 60 480 60 360 60C240 60 120 60 60 60H0V0Z" fill="currentColor"/>
+            <path d="M0 0L60 5C120 10 240 20 360 23.3C480 26.7 600 23.3 720 20C840 16.7 960 13.3 1080 13.3C1200 13.3 1320 16.7 1380 18.3L1440 20V60H1380C1320 60 1200 60 1080 60C960 60 840 60 720 60C600 60 480 60 360 60C240 60 120 60 60 60H0V0Z" fill="currentColor" />
           </svg>
         </div>
-        
+
         <div className="max-w-[1320px] mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
@@ -468,7 +476,7 @@ export function Home() {
             {industries.map((industry) => (
               <div
                 key={industry.name}
-                className="group relative overflow-hidden rounded-2xl aspect-[3/2] cursor-pointer"
+                className="group relative overflow-hidden rounded-2xl aspect-[3/2] cursor-pointer border border-border/40 shadow-lg hover:shadow-2xl transition-all duration-500"
               >
                 {/* Image */}
                 <ImageWithFallback
@@ -477,27 +485,27 @@ export function Home() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
 
-                {/* Gradient overlay */}
-                {/* <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div> */}
+                {/* Premium Gradient overlay for contrast on any image */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 group-hover:from-black/95 group-hover:via-black/60 transition-colors duration-500"></div>
 
-                {/* Red accent bar - appears on hover */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                {/* Metallic Accent Top Bar on hover */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 via-primary to-amber-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left z-10"></div>
 
                 {/* Content */}
-                <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                <div className="absolute inset-0 p-6 flex flex-col justify-end z-10">
                   {/* Title */}
-                  <h3 className="text-3xl font-bold text-primary mb-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-1.5 transform translate-y-1 group-hover:translate-y-0 group-hover:text-amber-300 transition-all duration-300 drop-shadow-md">
                     {industry.name}
                   </h3>
 
-                  {/* Description - hidden by default, shown on hover */}
-                  <p className="text-sm text-primary opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                  {/* Description */}
+                  <p className="text-sm text-white/80 opacity-90 group-hover:opacity-100 group-hover:text-white transform translate-y-1 group-hover:translate-y-0 transition-all duration-300 leading-snug">
                     {industry.description}
                   </p>
                 </div>
 
                 {/* Border glow effect on hover */}
-                <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-2xl transition-colors duration-300"></div>
+                <div className="absolute inset-0 border-2 border-transparent group-hover:border-amber-400/30 rounded-2xl transition-colors duration-300 pointer-events-none"></div>
               </div>
             ))}
           </div>
@@ -533,7 +541,7 @@ export function Home() {
                   Industry-leading heating solutions built on decades of expertise
                 </p>
               </div>
-          
+
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -546,8 +554,8 @@ export function Home() {
                     </p>
                   </div>
                 </div>
-                
-               <div className="flex gap-4">
+
+                <div className="flex gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Headphones className="text-primary" size={24} />
                   </div>
@@ -558,8 +566,8 @@ export function Home() {
                     </p>
                   </div>
                 </div>
-                
-                 <div className="flex gap-4">
+
+                <div className="flex gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Zap className="text-primary" size={24} />
                   </div>
@@ -583,7 +591,7 @@ export function Home() {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Shield className="text-primary" size={24} />
@@ -596,13 +604,13 @@ export function Home() {
                   </div>
                 </div>
 
-               
 
-                
 
-               
 
-                
+
+
+
+
 
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -637,7 +645,7 @@ export function Home() {
           <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="relative max-w-[1320px] mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 md:mb-6">
             Need a Custom Heating Solution?

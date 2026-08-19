@@ -47,6 +47,11 @@ import wasteWater         from "../../imports/waste water.png";
 import electricSteam         from "../../imports/electric steam.png";
 import superSteam         from "../../imports/super steam.png";
 import bagFilter         from "../../imports/bag filter.png";
+import bagFilterGal1    from "../../imports/bag-filter-gallery/gallery-1.png";
+import bagFilterGal2    from "../../imports/bag-filter-gallery/gallery-2.png";
+import bagFilterGal3    from "../../imports/bag-filter-gallery/gallery-3.png";
+import bagFilterGal4    from "../../imports/bag-filter-gallery/gallery-4.png";
+import bagFilterGal5    from "../../imports/bag-filter-gallery/gallery-5.png";
 import coiler         from "../../imports/coiler.png";
 import ductHeater         from "../../imports/duct heater.png";
 import pharma         from "../../imports/pharma.png";
@@ -80,7 +85,7 @@ export const subcategoryFallbackImages: Record<string, string> = {
 };
 export const categoryProducts: Record<
   string,
-  Array<{ name: string; image: string; description: string; category?: string }>
+  Array<{ name: string; image: string; description: string; category?: string; gallery_images?: string[] }>
 > = {
 
   /* ─────────────────────────────────────────────────────────────────
@@ -105,6 +110,7 @@ export const categoryProducts: Record<
       image: bagFilter,
       description: "Compact inline hot air generator with protective housing for continuous hot air supply in industrial processes.",
       category: "Air Heaters",
+      gallery_images: [bagFilterGal1, bagFilterGal2, bagFilterGal3, bagFilterGal4, bagFilterGal5],
     },
     {
       name: "COILER HEATERS FOR OVEN",

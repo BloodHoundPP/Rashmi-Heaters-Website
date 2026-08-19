@@ -201,10 +201,26 @@ export function useSubcategoryProducts(categorySlug?: string, subSlug?: string) 
           const localMatch = localProducts.find(p => p.name.trim().toLowerCase() === product.name.trim().toLowerCase()) 
                           || localProducts[index];
           const fallbackImage = localMatch ? localMatch.image : null;
+          const fallbackGallery = localMatch?.gallery_images || [];
+
+          let dbGallery: string[] = [];
+          if (Array.isArray(product.gallery_images) && product.gallery_images.length > 0) {
+            dbGallery = product.gallery_images;
+          } else if (typeof product.gallery_images === "string") {
+            try {
+              const parsed = JSON.parse(product.gallery_images);
+              if (Array.isArray(parsed)) dbGallery = parsed;
+            } catch {
+              // ignore JSON parse error
+            }
+          }
+
+          const gallery_images = dbGallery.length > 0 ? dbGallery : fallbackGallery;
 
           return {
             ...product,
             image: getValidImageUrl(product.image_url, fallbackImage),
+            gallery_images,
           };
         }));
         setLoading(false);

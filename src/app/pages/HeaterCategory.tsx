@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { useSubcategoryProducts } from "../lib/useCategories";
+import { ProductDetailsModal } from "../components/ProductDetailsModal";
 
 const categoryNames: Record<string, string> = {
   "air-heaters":               "Air Heaters",
@@ -38,6 +40,7 @@ const parentNames: Record<string, { name: string; path: string }> = {
 
 export function HeaterCategory() {
   const { category, subCategory, productId } = useParams();
+  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
   const activeKey = subCategory ?? category ?? "";
   const parentSlug = productId ?? "customized-heaters";
@@ -149,7 +152,8 @@ export function HeaterCategory() {
             {products.map((product, index) => (
               <Card
                 key={index}
-                className="group overflow-hidden hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1"
+                className="group overflow-hidden hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 cursor-pointer"
+                onClick={() => setSelectedProduct(product)}
               >
                 <div className="aspect-[1/1] overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-blue-950/20 dark:via-secondary dark:to-blue-950/20 flex items-center justify-center p-[0px]">
                   <ImageWithFallback
@@ -159,19 +163,24 @@ export function HeaterCategory() {
                   />
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-foreground mb-3 line-clamp-2 min-h-[3.5rem]">
+                  <h3 className="text-xl font-semibold text-foreground mb-3 line-clamp-2 min-h-[3.5rem] group-hover:text-primary transition-colors">
                     {product.name}
                   </h3>
                   <p className="text-sm text-muted-foreground line-clamp-4 mb-6">
                     {product.description}
                   </p>
-                  <div className="flex gap-3">
-                    <Link to="/contact" className="flex-1">
+                  <div className="flex gap-3" onClick={(e) => e.stopPropagation()}>
+                    <Link to={`/contact?product=${encodeURIComponent(product.name)}`} className="flex-1">
                       <Button variant="default" className="w-full" size="sm">
                         Request Quote
                       </Button>
                     </Link>
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setSelectedProduct(product)}
+                      className="hover:border-primary hover:text-primary transition-colors"
+                    >
                       Details
                     </Button>
                   </div>
@@ -198,6 +207,13 @@ export function HeaterCategory() {
           </Link>
         </div>
       </section>
+
+      {/* Product Details Modal */}
+      <ProductDetailsModal
+        product={selectedProduct}
+        categoryName={categoryName}
+        onClose={() => setSelectedProduct(null)}
+      />
     </div>
   );
 }

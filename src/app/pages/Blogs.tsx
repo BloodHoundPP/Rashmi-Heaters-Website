@@ -251,7 +251,7 @@ export function Blogs() {
             <div className="flex-1 h-px bg-border" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               { img: "/images/exhibitions/e10.jpg", title: "Industrial Expo Ankleshwar 2022" },
               { img: "/images/exhibitions/e9.jpg", title: "Dahej Industrial Expo 2021" },
@@ -264,18 +264,18 @@ export function Blogs() {
             ].map((expo, idx) => (
               <div 
                 key={idx}
-                className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card transition-colors shadow-sm hover:shadow-md"
+                className="group relative rounded-2xl overflow-hidden border border-border bg-card/60 hover:bg-card hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/5 flex flex-col"
               >
-                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                <div className="aspect-[16/11] w-full overflow-hidden bg-secondary/50 p-2 flex items-center justify-center">
                   <img 
                     src={expo.img} 
                     alt={expo.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
                 </div>
-                <div className="p-4 text-center border-t border-border/50">
-                  <h3 className="font-semibold text-foreground text-sm line-clamp-2">{expo.title}</h3>
+                <div className="p-5 text-center border-t border-border/50 bg-card/40 flex-1 flex items-center justify-center">
+                  <h3 className="font-semibold text-foreground text-base leading-snug group-hover:text-primary transition-colors">{expo.title}</h3>
                 </div>
               </div>
             ))}
