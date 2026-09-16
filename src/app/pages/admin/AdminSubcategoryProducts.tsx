@@ -101,11 +101,18 @@ export function AdminSubcategoryProducts() {
       gallery_images: editing.gallery_images ?? [],
     };
 
+    let res;
     if (editing.id) {
-      await supabase.from("products").update(payload).eq("id", editing.id);
+      res = await supabase.from("products").update(payload).eq("id", editing.id);
     } else {
-      await supabase.from("products").insert(payload);
+      res = await supabase.from("products").insert(payload);
     }
+
+    if (res?.error) {
+      alert("Error saving product: " + res.error.message);
+      return;
+    }
+
     setEditing(null);
     load();
   }
