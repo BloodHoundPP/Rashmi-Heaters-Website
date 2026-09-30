@@ -182,7 +182,7 @@ export function Products() {
                         <CardContent className="p-6">
                           <div className="mb-3">
                             <span className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
-                              {category.productCount} Models
+                              {category.productCount > 0 ? `${category.productCount} Models` : "Showcase Available"}
                             </span>
                           </div>
                           <h3 className="text-xl font-semibold text-foreground mb-2">{category.name}</h3>

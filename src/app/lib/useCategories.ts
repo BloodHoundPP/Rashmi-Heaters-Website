@@ -39,14 +39,32 @@ export function useSubcategoriesWithCounts(parentSlug?: string) {
       if (!parent) { setLoading(false); return; }
       const { data } = await supabase
         .from("subcategories")
-        .select("id, slug, name, image_url, description, products(count)")
+        .select("*, products(count)")
         .eq("category_id", parent.id)
         .order("sort_order");
       setSubcategories((data ?? []).map((s: any) => {
         const fallbackImage = subcategoryFallbackImages[s.slug] || categoryProducts[s.slug]?.[0]?.image || null;
+        const validImageUrl = getValidImageUrl(s.image_url, fallbackImage);
+
+        let gallery: string[] = [];
+        if (Array.isArray(s.gallery_images) && s.gallery_images.length > 0) {
+          gallery = s.gallery_images;
+        } else if (typeof s.gallery_images === "string") {
+          try {
+            const parsed = JSON.parse(s.gallery_images);
+            if (Array.isArray(parsed)) gallery = parsed;
+          } catch {
+            // ignore
+          }
+        }
+        if (gallery.length === 0 && validImageUrl) {
+          gallery = [validImageUrl];
+        }
+
         return {
           ...s,
-          image_url: getValidImageUrl(s.image_url, fallbackImage),
+          image_url: validImageUrl,
+          gallery_images: gallery,
           productCount: s.products?.[0]?.count ?? 0,
         };
       }));
@@ -152,11 +170,13 @@ export function useCategoryBySlug(slug?: string) {
 
 export function useSubcategoryProducts(categorySlug?: string, subSlug?: string) {
   const [products, setProducts] = useState<any[]>([]);
+  const [subcategory, setSubcategory] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!categorySlug || !subSlug) {
       setProducts([]);
+      setSubcategory(null);
       setLoading(false);
       return;
     }
@@ -168,6 +188,7 @@ export function useSubcategoryProducts(categorySlug?: string, subSlug?: string) 
       if (!cat) {
         if (isMounted) {
           setProducts([]);
+          setSubcategory(null);
           setLoading(false);
         }
         return;
@@ -175,7 +196,7 @@ export function useSubcategoryProducts(categorySlug?: string, subSlug?: string) 
 
       const { data: sub } = await supabase
         .from("subcategories")
-        .select("id")
+        .select("*")
         .eq("category_id", cat.id)
         .eq("slug", subSlug)
         .single();
@@ -183,10 +204,36 @@ export function useSubcategoryProducts(categorySlug?: string, subSlug?: string) 
       if (!sub) {
         if (isMounted) {
           setProducts([]);
+          setSubcategory(null);
           setLoading(false);
         }
         return;
       }
+
+      const fallbackSubImage = subcategoryFallbackImages[subSlug] || categoryProducts[subSlug]?.[0]?.image || null;
+      const validSubImage = getValidImageUrl(sub.image_url, fallbackSubImage);
+
+      let subGallery: string[] = [];
+      if (Array.isArray(sub.gallery_images) && sub.gallery_images.length > 0) {
+        subGallery = sub.gallery_images;
+      } else if (typeof sub.gallery_images === "string") {
+        try {
+          const parsed = JSON.parse(sub.gallery_images);
+          if (Array.isArray(parsed)) subGallery = parsed;
+        } catch {
+          // ignore
+        }
+      }
+
+      if (subGallery.length === 0 && validSubImage) {
+        subGallery = [validSubImage];
+      }
+
+      const formattedSubcategory = {
+        ...sub,
+        image_url: validSubImage,
+        gallery_images: subGallery,
+      };
 
       const { data } = await supabase
         .from("products")
@@ -195,6 +242,7 @@ export function useSubcategoryProducts(categorySlug?: string, subSlug?: string) 
         .order("sort_order");
 
       if (isMounted) {
+        setSubcategory(formattedSubcategory);
         setProducts((data ?? []).map((product: any, index: number) => {
           const localProducts = categoryProducts[subSlug] || [];
           // Try to match by name first, otherwise fallback to index, then null
@@ -232,5 +280,5 @@ export function useSubcategoryProducts(categorySlug?: string, subSlug?: string) 
     };
   }, [categorySlug, subSlug]);
 
-  return { products, loading };
+  return { products, subcategory, loading };
 }

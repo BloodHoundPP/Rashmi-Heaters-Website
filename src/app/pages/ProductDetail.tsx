@@ -191,7 +191,9 @@ export function ProductDetail() {
                           <h3 className="text-base font-semibold text-foreground mb-1 line-clamp-2">{subcategory.name}</h3>
                           <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{subcategory.description}</p>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-primary font-medium">{subcategory.productCount ?? 0} Products</span>
+                            <span className="text-sm text-primary font-medium">
+                              {(subcategory.productCount ?? 0) > 0 ? `${subcategory.productCount} Products` : "View Showcase"}
+                            </span>
                             <ArrowRight className="text-primary group-hover:translate-x-1 transition-transform" size={16} />
                           </div>
                         </CardContent>
