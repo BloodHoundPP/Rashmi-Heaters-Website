@@ -30,27 +30,17 @@ import {
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
-import { BackgroundTexture } from "../components/BackgroundTexture";
-import { ImageStack3D } from "../components/ImageStack3D";
 import { ProcessTimeline } from "../components/ProcessTimeline";
 import { HeroSlider } from "../components/HeroSlider";
 import { ClientsCarousel } from "../components/ClientsCarousel";
-import { CertificatesSection } from "../components/CertificatesSection";
 import { TestimonialsSection } from "../components/TestimonialsSection";
-import heroImage1 from "../../imports/image_be12e0a3.png";
-import heroImage2 from "../../imports/image_adf5f190.png";
-import heroImage3 from "../../imports/d-type.png";
-import heroImage4 from "../../imports/Untitled_design__22_.png";
 import rashmiHeaterVideo from "../../imports/Rashmi_Heater_Video.mp4";
-import rashmiLogoImg from "../../imports/Untitled_design__19_.png";
 import customizedHeaterImg from "../../imports/CUSTOMIZED CARD IMG.png";
 import openWireImg from "../../imports/open wire card.png";
 import controlPanelImg from "../../imports/control panel card img (1).png";
 import cartridgeHeaterImg from "../../imports/cat-cartaige-heater.png";
 import dTypeImg from "../../imports/d-type.png";
 import standardHeaterImg from "../../imports/std_card.png";
-
-
 
 export function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -59,32 +49,26 @@ export function Home() {
     const video = videoRef.current;
     if (!video) return;
     video.muted = true;
-    const promise = video.play();
-    if (promise !== undefined) {
-      promise.catch(() => {});
-    }
+
+    // Use IntersectionObserver so the 2.5MB video only loads and plays when scrolled into view
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const promise = video.play();
+          if (promise !== undefined) promise.catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(video);
     return () => {
+      observer.disconnect();
       video.pause();
     };
   }, []);
-  const heroImages = [
-    {
-      src: heroImage1,
-      alt: "Rashmi Heaters Cartridge Heater",
-    },
-    {
-      src: heroImage2,
-      alt: "Rashmi Heaters Industrial Heating Equipment",
-    },
-    {
-      src: heroImage3,
-      alt: "Rashmi Heaters Control Panel System",
-    },
-    {
-      src: heroImage4,
-      alt: "Rashmi Heaters Control Panel System",
-    },
-  ];
 
   const products = [
     {
@@ -283,122 +267,7 @@ export function Home() {
         `}</style>
       </div>
 
-      {/* Hero Section OLD — hidden */}
-      <section className="relative min-h-screen flex items-center pt-20 pb-32 overflow-hidden hidden">
-        {/* Background with gradient overlay and texture */}
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/20 to-background"></div>
 
-        {/* Grid texture pattern */}
-        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(to right, currentColor 1px, transparent 1px),
-              linear-gradient(to bottom, currentColor 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px'
-          }}></div>
-        </div>
-
-        {/* Dot texture pattern */}
-        <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle, currentColor 1px, transparent 1px)`,
-            backgroundSize: '30px 30px'
-          }}></div>
-        </div>
-
-        {/* Gradient blobs */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 right-20 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 left-20 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
-        </div>
-
-        {/* Curved bottom border */}
-        <div className="absolute bottom-0 left-0 right-0 text-background">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="currentColor" />
-          </svg>
-        </div>
-
-        <div className="relative max-w-[1320px] mx-auto px-6 w-full">
-          <div className="grid lg:grid-cols-[1.3fr_1fr] gap-12 items-start">
-            {/* Left: Text Content */}
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-2 rounded-full">
-                <Award className="text-primary" size={18} />
-                <span className="text-sm text-primary">ISO 9001:2015 Certified</span>
-              </div>
-
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
-                Industrial Heater Manufacturer & Custom Heating Solutions in India
-              </h1>
-
-              <p className="text-xl text-muted-foreground max-w-xl">
-                From standard heating elements to fully customized industrial heating systems, we deliver energy-efficient, reliable, and application-specific solutions tailored to your process requirements.
-              </p>
-
-              <div className="flex flex-wrap gap-4">
-                <Link to="/products">
-                  <Button size="lg" className="text-lg px-8">
-                    Explore Products
-                    <ArrowRight className="ml-2" size={20} />
-                  </Button>
-                </Link>
-                <Link to="/contact">
-                  <Button size="lg" variant="outline" className="text-lg px-8">
-                    Get a Quote
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Trust Badges */}
-              <div className="flex flex-wrap gap-8 pt-8">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <CheckCircle2 className="text-primary" size={24} />
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-foreground">30+</div>
-                    <div className="text-sm text-muted-foreground">Years Experience</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Users className="text-primary" size={24} />
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-foreground">500+</div>
-                    <div className="text-sm text-muted-foreground">Clients</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Globe className="text-primary" size={24} />
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-foreground">Global</div>
-                    <div className="text-sm text-muted-foreground">Exported Globally</div>
-                  </div>
-                </div>
-
-
-              </div>
-            </div>
-
-            {/* Right: Hero Image */}
-            <div className="relative min-h-[600px] lg:min-h-0 flex items-center justify-center pt-16">
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl blur-2xl"></div>
-              <div className="relative w-full max-w-lg aspect-[3/4]">
-                <ImageStack3D images={heroImages} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Certificates Section */}
-      {/* <CertificatesSection /> */}
 
       {/* Product Categories */}
       <section className="py-14 md:py-24 bg-card/50 relative">
@@ -522,10 +391,10 @@ export function Home() {
                 <video
                   ref={videoRef}
                   src={rashmiHeaterVideo}
-                  autoPlay
                   muted
                   loop
                   playsInline
+                  preload="none"
                   className="w-full h-full object-cover max-h-[480px]"
                 />
               </div>

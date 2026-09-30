@@ -193,6 +193,8 @@ export function ClientsCarousel() {
                 <img
                   src={client.logo}
                   alt={client.name}
+                  loading="lazy"
+                  decoding="async"
                   className="relative w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
