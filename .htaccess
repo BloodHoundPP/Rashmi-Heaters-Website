@@ -1,0 +1,32 @@
+# ----------------------------------------------------------------------
+# Root .htaccess for Hostinger Git Deployment to public_html
+# Forwards requests to the compiled dist/ directory and ignores default.php
+# ----------------------------------------------------------------------
+
+DirectoryIndex dist/index.html index.html index.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Override Hostinger's default.php parking page
+  RewriteRule ^default\.php$ /dist/index.html [L]
+
+  # If dist directory exists and request does not already start with /dist/
+  # Check if the requested file/directory exists inside dist/
+  RewriteCond %{REQUEST_URI} !^/dist/
+  RewriteCond %{DOCUMENT_ROOT}/dist%{REQUEST_URI} -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/dist%{REQUEST_URI} -d
+  RewriteRule ^(.*)$ /dist/$1 [L]
+
+  # Direct asset requests
+  RewriteCond %{REQUEST_URI} ^/assets/(.*)$
+  RewriteRule ^assets/(.*)$ /dist/assets/$1 [L]
+
+  RewriteCond %{REQUEST_URI} ^/images/(.*)$
+  RewriteRule ^images/(.*)$ /dist/images/$1 [L]
+
+  # If not in dist/, route all other paths to dist/index.html
+  RewriteCond %{REQUEST_URI} !^/dist/
+  RewriteRule ^(.*)$ /dist/index.html [L]
+</IfModule>

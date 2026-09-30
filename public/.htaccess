@@ -1,7 +1,10 @@
 # ----------------------------------------------------------------------
 # Rashmi Heaters - Hostinger & LiteSpeed Optimization
-# Prevents HTTP 429 (Too Many Requests), enables Browser Caching & Compression
+# Prevents HTTP 429, overrides default.php parking page, enables Caching & Compression
 # ----------------------------------------------------------------------
+
+# Prioritize index.html over Hostinger default.php
+DirectoryIndex index.html index.php
 
 # 1. Prevent Directory Listing
 Options -Indexes
@@ -62,6 +65,9 @@ Options -Indexes
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # Override Hostinger's default.php parking page
+  RewriteRule ^default\.php$ index.html [L]
 
   # Allow existing files and directories to be served directly
   RewriteCond %{REQUEST_FILENAME} -f [OR]
