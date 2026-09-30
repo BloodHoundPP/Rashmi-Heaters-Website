@@ -61,8 +61,14 @@ export function AdminSubcategories() {
 
   async function handleImageUpload(file: File) {
     setUploading(true);
-    const path = `sub-main-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    let processed = file;
+    try {
+      processed = await autoTrimImageFile(file);
+    } catch (err) {
+      console.warn("Auto-trim skipped:", err);
+    }
+    const path = `sub-main-${Date.now()}-${processed.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+    const { error } = await supabase.storage.from("product-images").upload(path, processed);
     if (!error && editing) {
       const { data } = supabase.storage.from("product-images").getPublicUrl(path);
       setEditing({ ...editing, image_url: data.publicUrl });
@@ -78,7 +84,13 @@ export function AdminSubcategories() {
     const newUrls: string[] = [];
 
     for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+      let file = files[i];
+      try {
+        file = await autoTrimImageFile(file);
+      } catch (err) {
+        console.warn("Auto-trim skipped:", err);
+      }
+
       const path = `sub-gallery-${Date.now()}-${i}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
       const { error } = await supabase.storage.from("product-images").upload(path, file);
       if (!error) {

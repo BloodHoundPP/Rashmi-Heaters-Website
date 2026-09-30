@@ -5,6 +5,8 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Maximize2, 
+  ZoomIn,
+  ZoomOut,
   X, 
   Mail, 
   CheckCircle2, 
@@ -80,6 +82,7 @@ export function HeaterCategory() {
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
+  const [zoomLevel, setZoomLevel] = useState<number>(1.12);
 
   const activeKey = subCategory ?? category ?? "";
   const parentSlug = productId ?? "customized-heaters";
@@ -224,14 +227,20 @@ export function HeaterCategory() {
               <div className="lg:col-span-7 space-y-4">
                 <Card className="overflow-hidden border-border bg-card/80 shadow-xl rounded-2xl relative">
                   {/* Main Active Image View */}
-                  <div className="relative aspect-[4/3] bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-slate-900/40 dark:via-secondary dark:to-slate-900/40 flex items-center justify-center p-6 overflow-hidden">
+                  <div className="relative aspect-[16/11] min-h-[440px] md:min-h-[500px] bg-gradient-to-br from-slate-50 via-white to-slate-100/90 dark:from-slate-900/60 dark:via-slate-900/40 dark:to-slate-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden group">
                     {activeImage ? (
-                      <ImageWithFallback
-                        src={activeImage}
-                        alt={`${categoryName} showcase image ${activeImageIndex + 1}`}
-                        className="w-full h-full object-contain cursor-zoom-in transition-transform duration-300 hover:scale-105"
+                      <div
+                        className="w-full h-full flex items-center justify-center cursor-zoom-in overflow-hidden transition-all duration-300"
                         onClick={() => setIsLightboxOpen(true)}
-                      />
+                        title="Click to view full-screen high-res"
+                      >
+                        <ImageWithFallback
+                          src={activeImage}
+                          alt={`${categoryName} showcase image ${activeImageIndex + 1}`}
+                          className="w-full h-full object-contain transition-transform duration-300 drop-shadow-md"
+                          style={{ transform: `scale(${zoomLevel})` }}
+                        />
+                      </div>
                     ) : (
                       <div className="text-center text-muted-foreground py-16">
                         <Images className="w-12 h-12 mx-auto mb-2 opacity-40" />
@@ -241,21 +250,50 @@ export function HeaterCategory() {
 
                     {/* Image Counter Badge */}
                     {showcaseImages.length > 0 && (
-                      <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md">
+                      <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md z-10">
                         <Images size={13} />
                         Image {activeImageIndex + 1} of {showcaseImages.length}
                       </div>
                     )}
 
-                    {/* Fullscreen Button */}
+                    {/* Top Right Controls: Zoom & Fullscreen */}
                     {activeImage && (
-                      <button
-                        onClick={() => setIsLightboxOpen(true)}
-                        className="absolute top-4 right-4 p-2 bg-black/60 hover:bg-black/80 backdrop-blur-md text-white rounded-full transition-all shadow-md hover:scale-105"
-                        title="View Fullscreen"
-                      >
-                        <Maximize2 size={16} />
-                      </button>
+                      <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+                        <div className="bg-black/70 backdrop-blur-md text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1 shadow-md">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setZoomLevel((prev) => Math.max(1, +(prev - 0.15).toFixed(2)));
+                            }}
+                            className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                            title="Zoom Out"
+                          >
+                            <ZoomOut size={13} />
+                          </button>
+                          <span className="px-1 text-[11px] font-mono">{Math.round(zoomLevel * 100)}%</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setZoomLevel((prev) => Math.min(2.0, +(prev + 0.15).toFixed(2)));
+                            }}
+                            className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                            title="Zoom In"
+                          >
+                            <ZoomIn size={13} />
+                          </button>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setIsLightboxOpen(true)}
+                          className="p-2 bg-black/70 hover:bg-black/90 backdrop-blur-md text-white rounded-full transition-all shadow-md hover:scale-105"
+                          title="View Fullscreen"
+                        >
+                          <Maximize2 size={15} />
+                        </button>
+                      </div>
                     )}
 
                     {/* Navigation Arrows for Main Viewer */}
@@ -450,14 +488,16 @@ export function HeaterCategory() {
               </>
             )}
 
-            <div className="max-w-4xl max-h-[85vh] flex flex-col items-center">
-              <img
-                src={activeImage}
-                alt={`${categoryName} high resolution preview`}
-                className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
-              />
-              <div className="text-white text-sm mt-4 font-semibold bg-white/15 px-4 py-1.5 rounded-full">
-                {categoryName} — Image {activeImageIndex + 1} of {showcaseImages.length}
+            <div className="max-w-6xl w-full max-h-[92vh] flex flex-col items-center">
+              <div className="relative w-full max-h-[82vh] flex items-center justify-center p-2">
+                <img
+                  src={activeImage}
+                  alt={`${categoryName} high resolution preview`}
+                  className="max-w-full max-h-[82vh] object-contain rounded-lg shadow-2xl drop-shadow-2xl"
+                />
+              </div>
+              <div className="text-white text-xs md:text-sm mt-3 font-semibold bg-white/15 backdrop-blur-md px-5 py-2 rounded-full flex items-center gap-3">
+                <span>{categoryName} — Image {activeImageIndex + 1} of {showcaseImages.length}</span>
               </div>
             </div>
           </div>
