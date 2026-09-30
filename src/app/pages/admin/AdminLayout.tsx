@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet";
 import { useState } from "react";
 
 const navItems = [
-  { label: "Dashboard", to: "/admin" },
+  { label: "Dashboard & Showcase", to: "/admin" },
   { label: "Categories", to: "/admin/categories" },
 ];
 

@@ -1,0 +1,1 @@
+import{s}from"./index-BNUngcWB.js";async function o(t,n){const{data:i,error:a}=await s.auth.signInWithPassword({email:t,password:n});if(a)throw a;return i}async function u(){await s.auth.signOut()}export{u as a,o as s};
