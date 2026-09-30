@@ -7,6 +7,7 @@ import { Textarea } from "../../components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
 import { ImageWithFallback } from "../../components/figma/ImageWithFallback";
 import { Upload, X, Plus, Images, Star, AlertCircle } from "lucide-react";
+import { autoTrimImageFile } from "../../lib/imageTrim";
 
 type Subcategory = {
   id?: string;
@@ -24,6 +25,7 @@ export function AdminSubcategories() {
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [editing, setEditing] = useState<Subcategory | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [newGalleryUrl, setNewGalleryUrl] = useState("");
   const [migrationWarning, setMigrationWarning] = useState<string | null>(null);
 
@@ -41,6 +43,10 @@ export function AdminSubcategories() {
         }
         setSubcategories((data ?? []).map((s: any) => ({
           ...s,
+          name: s.name || "",
+          slug: s.slug || "",
+          description: s.description || "",
+          image_url: s.image_url || "",
           gallery_images: Array.isArray(s.gallery_images)
             ? s.gallery_images
             : (typeof s.gallery_images === "string" ? JSON.parse(s.gallery_images || "[]") : []),
@@ -129,44 +135,71 @@ export function AdminSubcategories() {
 
   async function handleSave() {
     if (!editing || !categoryId) return;
+    setSaving(true);
 
-    const payload: any = {
-      category_id: categoryId,
-      name: editing.name.trim(),
-      slug: (editing.slug || editing.name).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
-      image_url: editing.image_url || null,
-      description: editing.description.trim(),
-      gallery_images: editing.gallery_images ?? [],
-    };
-
-    let error: any = null;
-    if (editing.id) {
-      const res = await supabase.from("subcategories").update(payload).eq("id", editing.id);
-      error = res.error;
-    } else {
-      const res = await supabase.from("subcategories").insert(payload);
-      error = res.error;
-    }
-
-    if (error) {
-      // If gallery_images column is missing in Supabase
-      if (error.message?.includes("gallery_images") || error.details?.includes("gallery_images")) {
-        setMigrationWarning("Note: Supabase table 'subcategories' is missing the 'gallery_images' column. Run the SQL script in your Supabase SQL editor: ALTER TABLE subcategories ADD COLUMN IF NOT EXISTS gallery_images jsonb DEFAULT '[]'::jsonb;");
-        // Fallback: save without gallery_images so user doesn't lose other fields
-        delete payload.gallery_images;
-        if (editing.id) {
-          await supabase.from("subcategories").update(payload).eq("id", editing.id);
-        } else {
-          await supabase.from("subcategories").insert(payload);
-        }
-      } else {
-        alert("Failed to save subcategory: " + error.message);
+    try {
+      const name = (editing.name || "").trim();
+      if (!name) {
+        alert("Subcategory name is required.");
+        setSaving(false);
         return;
       }
-    }
 
-    setEditing(null);
-    load();
+      const rawSlug = (editing.slug || name).trim().toLowerCase();
+      const slug = rawSlug.replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+      const payload: any = {
+        category_id: categoryId,
+        name: name,
+        slug: slug || "subcategory",
+        image_url: (editing.image_url || "").trim() || null,
+        description: (editing.description || "").trim(),
+        gallery_images: Array.isArray(editing.gallery_images) ? editing.gallery_images : [],
+      };
+
+      let error: any = null;
+      let data: any = null;
+
+      if (editing.id) {
+        const res = await supabase.from("subcategories").update(payload).eq("id", editing.id).select();
+        error = res.error;
+        data = res.data;
+      } else {
+        const res = await supabase.from("subcategories").insert(payload).select();
+        error = res.error;
+        data = res.data;
+      }
+
+      if (error) {
+        // If gallery_images column is missing in Supabase
+        if (error.message?.includes("gallery_images") || error.details?.includes("gallery_images")) {
+          setMigrationWarning("Note: Supabase table 'subcategories' is missing the 'gallery_images' column. Run the SQL script in your Supabase SQL editor: ALTER TABLE subcategories ADD COLUMN IF NOT EXISTS gallery_images jsonb DEFAULT '[]'::jsonb;");
+          // Fallback: save without gallery_images so user doesn't lose other fields
+          delete payload.gallery_images;
+          if (editing.id) {
+            await supabase.from("subcategories").update(payload).eq("id", editing.id).select();
+          } else {
+            await supabase.from("subcategories").insert(payload).select();
+          }
+        } else {
+          alert("Failed to save subcategory: " + error.message);
+          setSaving(false);
+          return;
+        }
+      } else if (!data || data.length === 0) {
+        alert("Warning: No changes were saved. Your login session may have expired or permission was denied. Please refresh and log in again.");
+        setSaving(false);
+        return;
+      }
+
+      setEditing(null);
+      load();
+    } catch (err: any) {
+      console.error("Error saving subcategory:", err);
+      alert("Error saving subcategory: " + (err.message || String(err)));
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function handleDelete(id?: string) {
@@ -268,7 +301,22 @@ export function AdminSubcategories() {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    <Button size="sm" variant="outline" onClick={() => setEditing(subcategory)}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() =>
+                        setEditing({
+                          ...subcategory,
+                          name: subcategory.name || "",
+                          slug: subcategory.slug || "",
+                          description: subcategory.description || "",
+                          image_url: subcategory.image_url || "",
+                          gallery_images: Array.isArray(subcategory.gallery_images)
+                            ? subcategory.gallery_images
+                            : [],
+                        })
+                      }
+                    >
                       Edit
                     </Button>
                     <Link to={`/admin/categories/${categoryId}/subcategories/${subcategory.id}/products`}>
@@ -308,7 +356,7 @@ export function AdminSubcategories() {
               <label className="text-sm font-medium mb-1 block">Subcategory Name *</label>
               <Input
                 placeholder="e.g. Belt Dryer, Space Heater"
-                value={editing.name}
+                value={editing.name || ""}
                 onChange={(e) => setEditing({ ...editing, name: e.target.value })}
               />
             </div>
@@ -317,7 +365,7 @@ export function AdminSubcategories() {
               <label className="text-sm font-medium mb-1 block">URL Slug</label>
               <Input
                 placeholder="e.g. belt-dryer"
-                value={editing.slug}
+                value={editing.slug || ""}
                 onChange={(e) => setEditing({ ...editing, slug: e.target.value })}
               />
             </div>
@@ -327,7 +375,7 @@ export function AdminSubcategories() {
               <Textarea
                 rows={4}
                 placeholder="Detailed description of this subcategory, heating application, features, and custom specifications..."
-                value={editing.description}
+                value={editing.description || ""}
                 onChange={(e) => setEditing({ ...editing, description: e.target.value })}
               />
             </div>
@@ -481,10 +529,19 @@ export function AdminSubcategories() {
           </div>
 
           <div className="flex flex-wrap gap-2 pt-4 border-t">
-            <Button onClick={handleSave} className="flex-1 sm:flex-none">
-              Save Subcategory
+            <Button
+              onClick={handleSave}
+              disabled={saving || uploading}
+              className="flex-1 sm:flex-none font-semibold"
+            >
+              {saving ? "Saving Subcategory..." : "Save Subcategory"}
             </Button>
-            <Button variant="outline" onClick={() => setEditing(null)} className="flex-1 sm:flex-none">
+            <Button
+              variant="outline"
+              disabled={saving}
+              onClick={() => setEditing(null)}
+              className="flex-1 sm:flex-none"
+            >
               Cancel
             </Button>
           </div>

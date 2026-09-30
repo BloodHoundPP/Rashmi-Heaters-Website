@@ -20,8 +20,9 @@ import {
   FolderKanban,
   CheckCircle2,
   AlertCircle,
-  Eye
+  Eye,
 } from "lucide-react";
+import { autoTrimImageFile } from "../../lib/imageTrim";
 
 type SubcategoryItem = {
   id: string;
@@ -138,11 +139,18 @@ export function AdminDashboard() {
   const handleMultipleUpload = async (files: FileList) => {
     if (!selectedSub) return;
     setUploading(true);
-    setUploadProgress(`Uploading ${files.length} image${files.length > 1 ? "s" : ""}...`);
+    setUploadProgress(`Optimizing & uploading ${files.length} image${files.length > 1 ? "s" : ""}...`);
     const newUploadedUrls: string[] = [];
 
     for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+      let file = files[i];
+      setUploadProgress(`Trimming empty margins ${i + 1} of ${files.length}: ${file.name}...`);
+      try {
+        file = await autoTrimImageFile(file);
+      } catch (err) {
+        console.warn("Auto-trim skipped:", err);
+      }
+
       setUploadProgress(`Uploading ${i + 1} of ${files.length}: ${file.name}...`);
       const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
       const path = `sub-${selectedSub.slug}-${Date.now()}-${i}-${sanitizedName}`;
@@ -206,19 +214,39 @@ export function AdminDashboard() {
       image_url: currentPrimary || (currentGallery[0] ?? null),
     };
 
-    const { error } = await supabase
-      .from("subcategories")
-      .update(payload)
-      .eq("id", selectedSub.id);
+    try {
+      const { data, error } = await supabase
+        .from("subcategories")
+        .update(payload)
+        .eq("id", selectedSub.id)
+        .select();
 
-    if (error) {
-      alert("Failed to save images: " + error.message);
-    } else {
-      setSuccessMessage("✔ Changes saved successfully to Supabase! You can now view them on the live page.");
-      // Refresh local list
-      await loadData();
+      if (error) {
+        alert("Failed to save images: " + error.message);
+      } else if (!data || data.length === 0) {
+        alert("Warning: No changes were saved in Supabase. Your login session may have expired or permission was denied. Please refresh the page and log in again.");
+      } else {
+        // Immediately update state
+        setSubcategories((prev) =>
+          prev.map((s) =>
+            s.id === selectedSub.id
+              ? { ...s, gallery_images: currentGallery, image_url: payload.image_url }
+              : s
+          )
+        );
+        setSelectedSub((prev) =>
+          prev ? { ...prev, gallery_images: currentGallery, image_url: payload.image_url } : null
+        );
+        setSuccessMessage("✔ Changes saved successfully to Supabase! You can now view them on the live page.");
+        // Refresh full counts and state
+        await loadData();
+      }
+    } catch (err: any) {
+      console.error("Save showcase error:", err);
+      alert("Error saving showcase: " + (err.message || String(err)));
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   // Filter subcategories for the table

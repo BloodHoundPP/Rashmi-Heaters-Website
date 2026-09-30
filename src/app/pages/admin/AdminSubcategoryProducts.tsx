@@ -91,30 +91,41 @@ export function AdminSubcategoryProducts() {
   async function handleSave() {
     if (!editing || !subId) return;
 
-    const payload = {
-      subcategory_id: subId,
-      name: editing.name.trim(),
-      image_url: editing.image_url || null,
-      description: editing.description.trim(),
-      category_label: editing.category_label ?? null,
-      sort_order: editing.sort_order ?? 0,
-      gallery_images: editing.gallery_images ?? [],
-    };
+    try {
+      const name = (editing.name || "").trim();
+      if (!name) {
+        alert("Product name is required.");
+        return;
+      }
 
-    let res;
-    if (editing.id) {
-      res = await supabase.from("products").update(payload).eq("id", editing.id);
-    } else {
-      res = await supabase.from("products").insert(payload);
+      const payload = {
+        subcategory_id: subId,
+        name: name,
+        image_url: (editing.image_url || "").trim() || null,
+        description: (editing.description || "").trim(),
+        category_label: editing.category_label ?? null,
+        sort_order: editing.sort_order ?? 0,
+        gallery_images: Array.isArray(editing.gallery_images) ? editing.gallery_images : [],
+      };
+
+      let res;
+      if (editing.id) {
+        res = await supabase.from("products").update(payload).eq("id", editing.id).select();
+      } else {
+        res = await supabase.from("products").insert(payload).select();
+      }
+
+      if (res?.error) {
+        alert("Error saving product: " + res.error.message);
+        return;
+      }
+
+      setEditing(null);
+      load();
+    } catch (err: any) {
+      console.error("Error saving product:", err);
+      alert("Error saving product: " + (err.message || String(err)));
     }
-
-    if (res?.error) {
-      alert("Error saving product: " + res.error.message);
-      return;
-    }
-
-    setEditing(null);
-    load();
   }
 
   async function handleDelete(id: string) {
@@ -182,13 +193,13 @@ export function AdminSubcategoryProducts() {
           
           <div className="space-y-2">
             <label className="text-sm font-medium">Product Name</label>
-            <Input placeholder="Product Name" value={editing.name}
+            <Input placeholder="Product Name" value={editing.name || ""}
               onChange={(e) => setEditing({ ...editing, name: e.target.value })} />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Description</label>
-            <Textarea placeholder="Description" value={editing.description} rows={3}
+            <Textarea placeholder="Description" value={editing.description || ""} rows={3}
               onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
           </div>
           
