@@ -11,7 +11,7 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
     setDidError(true)
   }
 
-  const { src, alt, style, className, ...rest } = props
+  const { src, alt, style, className, loading = "lazy", decoding = "async", ...rest } = props
   const resolvedSrc = didError ? defaultCategoryImage : (src && typeof src === 'string' && src.trim() ? src : defaultCategoryImage)
 
   return didError ? (
@@ -20,10 +20,10 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
       style={style}
     >
       <div className="flex items-center justify-center w-full h-full">
-        <img src={resolvedSrc} alt={alt ?? 'Fallback image'} {...rest} data-original-url={src} />
+        <img src={resolvedSrc} alt={alt ?? 'Fallback image'} loading={loading} decoding={decoding} {...rest} data-original-url={src} />
       </div>
     </div>
   ) : (
-    <img src={resolvedSrc} alt={alt} className={className} style={style} {...rest} onError={handleError} />
+    <img src={resolvedSrc} alt={alt} className={className} style={style} loading={loading} decoding={decoding} {...rest} onError={handleError} />
   )
 }
