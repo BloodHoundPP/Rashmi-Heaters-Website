@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
-import { 
-  ArrowLeft, 
-  ChevronLeft, 
-  ChevronRight, 
-  Maximize2, 
+import {
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
   ZoomIn,
   ZoomOut,
-  X, 
-  Mail, 
-  CheckCircle2, 
-  Images, 
-  ShieldCheck, 
-  Zap, 
-  Layers, 
+  X,
+  Mail,
+  CheckCircle2,
+  Images,
+  ShieldCheck,
+  Zap,
+  Layers,
   Sparkles,
   PhoneCall,
   Clock,
@@ -28,53 +28,53 @@ import { subcategoryFallbackImages, categoryProducts } from "../data/categoryPro
 import { ProductDetailsModal } from "../components/ProductDetailsModal";
 
 const categoryNames: Record<string, string> = {
-  "air-heaters":               "Air Heaters",
-  "aluminium-casted-heaters":  "Aluminium Casted Heaters",
+  "air-heaters": "Air Heaters",
+  "aluminium-casted-heaters": "Aluminium Casted Heaters",
   "aluminium-extrusion-press": "Aluminium Extrusion Press",
-  "automotive-foundry":        "Automotive Foundry",
-  "belt-dryer":                "Belt Dryer",
-  "biogas-generation":         "Bio Gas Generation",
-  "cip-chemical-heating":      "CIP Chemical Heating",
-  "copper-annealing":          "Copper Annealing & Enamelling",
-  "esp-heaters":               "ESP Heaters",
-  "hnx-nitrogen-heaters":      "HNX Heaters & Nitrogen",
-  "load-bank":                 "Load Bank for Battery & UPS Testing",
-  "lpg-propane-evaporators":   "LPG & Propane Gas Evaporators",
-  "oil-heaters":               "Oil Heaters",
-  "packaging-machine-tunnel":  "Packaging Machine Tunnel Packing",
-  "panel-heaters":             "Panel Heaters",
-  "reactor-heater":            "Reactor Heater",
-  "space-heaters":             "Space Heater",
-  "steam-heaters":             "Steam Heater",
-  "syngas-heaters":            "Syngas Heater",
-  "water-heaters":             "Water Heater",
-  "d-type-standard":           "D-Type Standard",
-  "control-panel-on-off":      "On/Off Control Panel",
+  "automotive-foundry": "Automotive Foundry",
+  "belt-dryer": "Belt Dryer",
+  "biogas-generation": "Bio Gas Generation",
+  "cip-chemical-heating": "CIP Chemical Heating",
+  "copper-annealing": "Copper Annealing & Enamelling",
+  "esp-heaters": "ESP Heaters",
+  "hnx-nitrogen-heaters": "HNX Heaters & Nitrogen",
+  "load-bank": "Load Bank for Battery & UPS Testing",
+  "lpg-propane-evaporators": "LPG & Propane Gas Evaporators",
+  "oil-heaters": "Oil Heaters",
+  "packaging-machine-tunnel": "Packaging Machine Tunnel Packing",
+  "panel-heaters": "Panel Heaters",
+  "reactor-heater": "Reactor Heater",
+  "space-heaters": "Space Heater",
+  "steam-heaters": "Steam Heater",
+  "syngas-heaters": "Syngas Heater",
+  "water-heaters": "Water Heater",
+  "d-type-standard": "D-Type Standard",
+  "control-panel-on-off": "On/Off Control Panel",
   "control-panel-thyristorised": "Thyristorised Control Panel",
-  "std-u-shaped-air":          "U-Shaped Air Heater",
-  "std-industrial-water":      "Industrial Water Heater",
-  "std-oil-heating":           "Oil Heating",
-  "std-solar":                 "Solar",
-  "std-alkaline":              "Alkaline",
-  "std-chemical":              "Chemical",
-  "std-fin":                   "Fin Heater",
-  "cartridge-threaded":        "Threaded Cartridge",
-  "cartridge-flameproof":      "Flameproof Cartridge",
-  "cartridge-high-density":    "High Density Cartridge",
-  "cartridge-low-density":     "Low Density Cartridge",
-  "open-wire-furnace":         "Furnace Open Wire",
-  "open-wire-bundle-rod":      "Bundle Rod Open Wire",
-  "open-wire-stripe":          "Stripe Open Wire",
-  "open-wire-bionet":          "Bionet Open Wire",
+  "std-u-shaped-air": "U-Shaped Air Heater",
+  "std-industrial-water": "Industrial Water Heater",
+  "std-oil-heating": "Oil Heating",
+  "std-solar": "Solar",
+  "std-alkaline": "Alkaline",
+  "std-chemical": "Chemical",
+  "std-fin": "Fin Heater",
+  "cartridge-threaded": "Threaded Cartridge",
+  "cartridge-flameproof": "Flameproof Cartridge",
+  "cartridge-high-density": "High Density Cartridge",
+  "cartridge-low-density": "Low Density Cartridge",
+  "open-wire-furnace": "Furnace Open Wire",
+  "open-wire-bundle-rod": "Bundle Rod Open Wire",
+  "open-wire-stripe": "Stripe Open Wire",
+  "open-wire-bionet": "Bionet Open Wire",
 };
 
 const parentNames: Record<string, { name: string; path: string }> = {
   "customized-heaters": { name: "Customized Heaters", path: "/products/customized-heaters" },
-  "d-type-heaters":    { name: "D Type Heaters",    path: "/products/d-type-heaters" },
-  "control-panel":     { name: "Control Panels",     path: "/products/control-panel" },
-  "std-heaters":       { name: "Standard Heaters",   path: "/products/std-heaters" },
-  "cartridge-heaters": { name: "Cartridge Heaters",  path: "/products/cartridge-heaters" },
-  "open-wire":         { name: "Open Wire Heaters",  path: "/products/open-wire" },
+  "d-type-heaters": { name: "D Type Heaters", path: "/products/d-type-heaters" },
+  "control-panel": { name: "Control Panels", path: "/products/control-panel" },
+  "std-heaters": { name: "Standard Heaters", path: "/products/std-heaters" },
+  "cartridge-heaters": { name: "Cartridge Heaters", path: "/products/cartridge-heaters" },
+  "open-wire": { name: "Open Wire Heaters", path: "/products/open-wire" },
 };
 
 export function HeaterCategory() {
@@ -222,7 +222,7 @@ export function HeaterCategory() {
         <section className="py-12 md:py-16">
           <div className="max-w-[1320px] mx-auto px-6">
             <div className="grid lg:grid-cols-12 gap-8 items-start">
-              
+
               {/* Left Column: Interactive Image Showcase Gallery */}
               <div className="lg:col-span-7 space-y-4">
                 <Card className="overflow-hidden border-border bg-card/80 shadow-xl rounded-2xl relative">
@@ -325,11 +325,10 @@ export function HeaterCategory() {
                           <button
                             key={idx}
                             onClick={() => setActiveImageIndex(idx)}
-                            className={`relative shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all p-1 bg-white dark:bg-slate-900 ${
-                              activeImageIndex === idx
+                            className={`relative shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all p-1 bg-white dark:bg-slate-900 ${activeImageIndex === idx
                                 ? "border-primary ring-2 ring-primary/30 scale-105"
                                 : "border-border/60 hover:border-primary/50 opacity-70 hover:opacity-100"
-                            }`}
+                              }`}
                           >
                             <ImageWithFallback
                               src={img}
@@ -357,7 +356,7 @@ export function HeaterCategory() {
                   <h3 className="text-2xl font-bold text-foreground mb-4">
                     Custom Built for Demanding Operations
                   </h3>
-                  
+
                   <div className="space-y-3.5 mb-6 text-sm text-foreground">
                     <div className="flex items-start gap-3 p-3 rounded-xl bg-secondary/40 border border-border/50">
                       <Zap className="w-4 h-4 text-primary shrink-0 mt-0.5" />
@@ -422,7 +421,8 @@ export function HeaterCategory() {
                         className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-primary transition-colors"
                       >
                         <PhoneCall size={13} />
-                        Call Our Engineering Desk: +91 7414940988
+                        Call Our Engineering Desk: +91 9822946344
+
                       </a>
                     </div>
                   </div>
@@ -588,8 +588,8 @@ export function HeaterCategory() {
                         Request Quote
                       </Button>
                     </Link>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       onClick={() => setSelectedProduct(product)}
                       className="hover:border-primary hover:text-primary transition-colors"
