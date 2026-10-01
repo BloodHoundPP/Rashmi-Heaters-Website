@@ -7,6 +7,7 @@ import { Textarea } from "../../components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
 import { ImageWithFallback } from "../../components/figma/ImageWithFallback";
 import { Upload, X, Plus, Images } from "lucide-react";
+import { autoTrimImageFile } from "../../lib/imageTrim";
 
 type Product = {
   id?: string;
@@ -41,8 +42,14 @@ export function AdminSubcategoryProducts() {
 
   async function handleImageUpload(file: File) {
     setUploading(true);
-    const path = `${Date.now()}-${file.name}`;
-    const { error } = await supabase.storage.from("product-images").upload(path, file);
+    let processed = file;
+    try {
+      processed = await autoTrimImageFile(file);
+    } catch (err) {
+      console.warn("Auto-trim skipped:", err);
+    }
+    const path = `${Date.now()}-${processed.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+    const { error } = await supabase.storage.from("product-images").upload(path, processed);
     if (!error && editing) {
       const { data } = supabase.storage.from("product-images").getPublicUrl(path);
       setEditing({ ...editing, image_url: data.publicUrl });
@@ -56,8 +63,13 @@ export function AdminSubcategoryProducts() {
     const newUrls: string[] = [];
 
     for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const path = `gallery-${Date.now()}-${i}-${file.name}`;
+      let file = files[i];
+      try {
+        file = await autoTrimImageFile(file);
+      } catch (err) {
+        console.warn("Auto-trim skipped:", err);
+      }
+      const path = `gallery-${Date.now()}-${i}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
       const { error } = await supabase.storage.from("product-images").upload(path, file);
       if (!error) {
         const { data } = supabase.storage.from("product-images").getPublicUrl(path);

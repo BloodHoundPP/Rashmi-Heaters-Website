@@ -127,18 +127,18 @@ export function ProductDetailsModal({ product, categoryName, onClose }: ProductD
               {/* Left Column: Image & Product Gallery */}
               <div className="lg:col-span-6 space-y-4">
                 {/* Main Image Display Box */}
-                <div className="relative group rounded-2xl border border-border/60 bg-gradient-to-br from-blue-50/50 via-white to-blue-50/50 dark:from-blue-950/20 dark:via-secondary/50 dark:to-blue-950/20 aspect-[4/3] flex items-center justify-center p-4 overflow-hidden shadow-inner">
+                <div className="relative group rounded-2xl border border-border/60 bg-gradient-to-br from-blue-50/50 via-white to-blue-50/50 dark:from-blue-950/20 dark:via-secondary/50 dark:to-blue-950/20 aspect-[4/3] flex items-center justify-center p-2 sm:p-3 overflow-hidden shadow-inner">
                   
                   <ImageWithFallback
                     src={currentDisplayedImage}
                     alt={product.name}
-                    className="w-full h-full object-contain transition-all duration-300 group-hover:scale-105"
+                    className="w-full h-full object-contain transition-all duration-300 group-hover:scale-105 scale-110 drop-shadow-sm"
                   />
 
                   {/* Lightbox / Zoom Button */}
                   <button
                     onClick={() => setIsLightboxOpen(true)}
-                    className="absolute top-3 right-3 p-2.5 rounded-full bg-background/80 hover:bg-background text-foreground shadow-md backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
+                    className="absolute top-3 right-3 p-2.5 rounded-full bg-background/80 hover:bg-background text-foreground shadow-md backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110 z-10"
                     title="View Fullscreen"
                   >
                     <Maximize2 size={18} />
@@ -193,7 +193,7 @@ export function ProductDetailsModal({ product, categoryName, onClose }: ProductD
                           <ImageWithFallback
                             src={imgUrl}
                             alt={`${product.name} view ${idx + 1}`}
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-contain scale-110"
                           />
                         </button>
                       ))}

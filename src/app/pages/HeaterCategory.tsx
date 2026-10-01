@@ -82,7 +82,7 @@ export function HeaterCategory() {
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
-  const [zoomLevel, setZoomLevel] = useState<number>(1.12);
+  const [zoomLevel, setZoomLevel] = useState<number>(1.18);
 
   const activeKey = subCategory ?? category ?? "";
   const parentSlug = productId ?? "customized-heaters";
@@ -227,7 +227,7 @@ export function HeaterCategory() {
               <div className="lg:col-span-7 space-y-4">
                 <Card className="overflow-hidden border-border bg-card/80 shadow-xl rounded-2xl relative">
                   {/* Main Active Image View */}
-                  <div className="relative aspect-[16/11] min-h-[440px] md:min-h-[500px] bg-gradient-to-br from-slate-50 via-white to-slate-100/90 dark:from-slate-900/60 dark:via-slate-900/40 dark:to-slate-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden group">
+                  <div className="relative aspect-[16/10] min-h-[460px] md:min-h-[520px] bg-gradient-to-br from-slate-50 via-white to-slate-100/90 dark:from-slate-900/60 dark:via-slate-900/40 dark:to-slate-950 flex items-center justify-center p-2 sm:p-3 overflow-hidden group">
                     {activeImage ? (
                       <div
                         className="w-full h-full flex items-center justify-center cursor-zoom-in overflow-hidden transition-all duration-300"
@@ -264,7 +264,7 @@ export function HeaterCategory() {
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
-                              setZoomLevel((prev) => Math.max(1, +(prev - 0.15).toFixed(2)));
+                              setZoomLevel((prev) => Math.max(0.9, +(prev - 0.15).toFixed(2)));
                             }}
                             className="p-1 hover:bg-white/20 rounded-full transition-colors"
                             title="Zoom Out"
@@ -276,7 +276,7 @@ export function HeaterCategory() {
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
-                              setZoomLevel((prev) => Math.min(2.0, +(prev + 0.15).toFixed(2)));
+                              setZoomLevel((prev) => Math.min(2.5, +(prev + 0.15).toFixed(2)));
                             }}
                             className="p-1 hover:bg-white/20 rounded-full transition-colors"
                             title="Zoom In"
