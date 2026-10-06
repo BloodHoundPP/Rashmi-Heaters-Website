@@ -295,11 +295,11 @@ export function Home() {
                 key={product.id}
                 className="group overflow-hidden border-border hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2"
               >
-                <div className="aspect-[1/1] overflow-hidden bg-secondary">
+                <div className="aspect-[4/3] sm:aspect-square overflow-hidden bg-muted/40 flex items-center justify-center p-4">
                   <ImageWithFallback
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
                 <CardContent className="p-6">
