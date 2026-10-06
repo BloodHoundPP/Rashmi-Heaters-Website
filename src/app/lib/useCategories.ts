@@ -42,33 +42,39 @@ export function useSubcategoriesWithCounts(parentSlug?: string) {
         .select("*, products(count)")
         .eq("category_id", parent.id)
         .order("sort_order");
-      setSubcategories((data ?? []).map((s: any) => {
-        const fallbackImage = subcategoryFallbackImages[s.slug] || categoryProducts[s.slug]?.[0]?.image || null;
-        const validImageUrl = getValidImageUrl(s.image_url, fallbackImage);
+        const mapped = (data ?? []).map((s: any) => {
+          const fallbackImage = subcategoryFallbackImages[s.slug] || categoryProducts[s.slug]?.[0]?.image || null;
+          const validImageUrl = getValidImageUrl(s.image_url, fallbackImage);
 
-        let gallery: string[] = [];
-        if (Array.isArray(s.gallery_images) && s.gallery_images.length > 0) {
-          gallery = s.gallery_images;
-        } else if (typeof s.gallery_images === "string") {
-          try {
-            const parsed = JSON.parse(s.gallery_images);
-            if (Array.isArray(parsed)) gallery = parsed;
-          } catch {
-            // ignore
+          let gallery: string[] = [];
+          if (Array.isArray(s.gallery_images) && s.gallery_images.length > 0) {
+            gallery = s.gallery_images;
+          } else if (typeof s.gallery_images === "string") {
+            try {
+              const parsed = JSON.parse(s.gallery_images);
+              if (Array.isArray(parsed)) gallery = parsed;
+            } catch {
+              // ignore
+            }
           }
-        }
-        if (gallery.length === 0 && validImageUrl) {
-          gallery = [validImageUrl];
-        }
+          if (gallery.length === 0 && validImageUrl) {
+            gallery = [validImageUrl];
+          }
 
-        return {
-          ...s,
-          image_url: validImageUrl,
-          gallery_images: gallery,
-          productCount: s.products?.[0]?.count ?? 0,
-        };
-      }));
-      setLoading(false);
+          return {
+            ...s,
+            image_url: validImageUrl,
+            gallery_images: gallery,
+            productCount: s.products?.[0]?.count ?? 0,
+          };
+        });
+
+        mapped.sort((a: any, b: any) =>
+          (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" })
+        );
+
+        setSubcategories(mapped);
+        setLoading(false);
     })();
   }, [parentSlug]);
 
