@@ -1,6 +1,53 @@
-import { Calendar, MapPin, ArrowRight, CheckCircle2, Clock } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Calendar, X, ChevronLeft, ChevronRight, ZoomIn, Images } from "lucide-react";
+
+const boilerImages = [
+  { img: "/images/exhibitions/boiler-india-3.jpg", title: "Boiler India 2026 : Navi Mumbai" },
+  { img: "/images/exhibitions/boiler-india-1.jpg", title: "Boiler India 2026 : Navi Mumbai" },
+  { img: "/images/exhibitions/boiler-india-2.jpg", title: "Boiler India 2026 : Navi Mumbai" },
+  { img: "/images/exhibitions/boiler-india-2026.png", title: "Boiler India 2026 : Navi Mumbai" },
+];
+
+const pastExhibitions = [
+  { img: "/images/exhibitions/e10.jpg", title: "Industrial Expo Ankleshwar 2022" },
+  { img: "/images/exhibitions/e9.jpg", title: "Dahej Industrial Expo 2021" },
+  { img: "/images/exhibitions/e1.webp", title: "IFEX 2020 : Tamil Nadu" },
+  { img: "/images/exhibitions/e3.webp", title: "IFEX 2020 : Tamil Nadu" },
+  { img: "/images/exhibitions/e4.jpg", title: "IFEX 2020 : Tamil Nadu" },
+  { img: "/images/exhibitions/e5.jpg", title: "IFEX 2019 : NOIDA" },
+  { img: "/images/exhibitions/e7.jpg", title: "IFEX 2017 : GANDHINAGAR" },
+  { img: "/images/exhibitions/e8.jpg", title: "ELECRAMA 2016 : BANGLORE" },
+];
+
+// All images for global lightbox navigation
+const allGalleryItems = [...boilerImages, ...pastExhibitions];
 
 export function Blogs() {
+  const [boilerSlide, setBoilerSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+
+  // Auto-play boiler expo carousel when not hovered
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setBoilerSlide((prev) => (prev + 1) % boilerImages.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [isPaused]);
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (lightboxIdx === null) return;
+      if (e.key === "Escape") setLightboxIdx(null);
+      if (e.key === "ArrowLeft") setLightboxIdx((prev) => (prev! > 0 ? prev! - 1 : allGalleryItems.length - 1));
+      if (e.key === "ArrowRight") setLightboxIdx((prev) => (prev! < allGalleryItems.length - 1 ? prev! + 1 : 0));
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxIdx]);
+
   return (
     <div className="min-h-screen pt-36">
       {/* Header */}
@@ -18,223 +65,25 @@ export function Blogs() {
       </section>
 
       {/* ── Upcoming Events ── */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="max-w-[1320px] mx-auto px-6">
-
           {/* Section label */}
           <div className="flex items-center gap-3 mb-10">
             <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-2 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-primary" />
               <span className="text-sm text-primary font-semibold">Upcoming Events</span>
             </div>
             <div className="flex-1 h-px bg-border" />
           </div>
 
-          {/* Boiler India 2026 card */}
-          <div
-            className="relative rounded-3xl overflow-hidden"
-            style={{
-              background: "#ffffff",
-              border: "1px solid rgba(0,0,0,0.1)",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)",
-            }}
-          >
-            {/* Gold top accent */}
-            <div
-              className="h-1"
-              style={{ background: "linear-gradient(90deg, #C41E3A, #C9A961, #C41E3A)" }}
-            />
-
-            <div className="grid lg:grid-cols-2 gap-0">
-              {/* Left — content */}
-              <div className="p-10 lg:p-12">
-                {/* Badge */}
-                <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 mb-6 text-[11px] font-black tracking-widest uppercase"
-                  style={{ background: "#C41E3A", color: "#FFF" }}>
-                  🏭 We're Exhibiting!
-                </div>
-
-                <h2
-                  className="text-3xl lg:text-4xl font-black leading-tight mb-2"
-                  style={{ color: "#000" }}
-                >
-                  Meet Us at
-                </h2>
-                <h2
-                  className="text-4xl lg:text-5xl font-black leading-tight mb-8"
-                  style={{
-                    background: "linear-gradient(90deg, #8A6D3B, #C9A961, #8A6D3B)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  Boiler India 2026
-                </h2>
-
-                {/* Date & Venue */}
-                <div className="space-y-3 mb-8">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: "rgba(201,169,97,0.1)" }}
-                    >
-                      <Calendar size={15} style={{ color: "#8A6D3B" }} />
-                    </div>
-                    <div>
-                      <p className="text-[11px] uppercase tracking-widest mb-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>Date</p>
-                      <p className="text-sm font-bold" style={{ color: "#000" }}>8 – 10 October 2026</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                      style={{ background: "rgba(201,169,97,0.1)" }}
-                    >
-                      <MapPin size={15} style={{ color: "#8A6D3B" }} />
-                    </div>
-                    <div>
-                      <p className="text-[11px] uppercase tracking-widest mb-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>Venue</p>
-                      <p className="text-sm font-bold leading-snug" style={{ color: "#000" }}>
-                        CIDCO Exhibition & Convention Centre,<br />
-                        <span className="font-normal" style={{ color: "rgba(0,0,0,0.7)" }}>Navi Mumbai, India</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: "rgba(201,169,97,0.1)" }}
-                    >
-                      <Clock size={15} style={{ color: "#8A6D3B" }} />
-                    </div>
-                    <div>
-                      <p className="text-[11px] uppercase tracking-widest mb-0.5" style={{ color: "rgba(0,0,0,0.5)" }}>Timing</p>
-                      <p className="text-sm font-bold" style={{ color: "#000" }}>10:00 AM – 6:00 PM Daily</p>
-                    </div>
-                  </div>
-                </div>
-
-                <p className="text-sm leading-relaxed mb-8" style={{ color: "rgba(0,0,0,0.7)" }}>
-                  Discover our latest industrial heating solutions, custom-engineered heating
-                  elements, and innovative temperature control technologies at India's premier
-                  boiler and thermal energy exhibition.
-                </p>
-
-                {/* Highlights */}
-                <div className="grid grid-cols-2 gap-2.5 mb-8">
-                  {[
-                    "Live Product Demonstrations",
-                    "Meet Our Technical Experts",
-                    "Custom Heating Solutions",
-                    "Business & Dealer Enquiries",
-                  ].map((item) => (
-                    <div key={item} className="flex items-start gap-2">
-                      <CheckCircle2 size={14} className="shrink-0 mt-0.5" style={{ color: "#8A6D3B" }} />
-                      <span className="text-xs leading-snug" style={{ color: "rgba(0,0,0,0.8)" }}>
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* CTAs */}
-                <div className="flex flex-wrap gap-3">
-                  <a
-                    href="https://india.boilerworldexpo.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-opacity hover:opacity-90"
-                    style={{
-                      background: "linear-gradient(135deg, #8A6D3B, #C9A961)",
-                      color: "#FFF",
-                    }}
-                  >
-                    Visit Expo Website
-                    <ArrowRight size={14} />
-                  </a>
-                  <a
-                    href="/contact"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-colors hover:bg-black/5"
-                    style={{
-                      background: "transparent",
-                      border: "1px solid rgba(0,0,0,0.15)",
-                      color: "#000",
-                    }}
-                  >
-                    Book a Meeting
-                  </a>
-                </div>
-              </div>
-
-              {/* Right — expo logo + decorative */}
-              <div
-                className="relative flex flex-col items-center justify-center p-10 lg:p-12"
-                style={{ borderLeft: "1px solid rgba(0,0,0,0.05)" }}
-              >
-                {/* Glowing ring */}
-                <div
-                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  style={{ zIndex: 0 }}
-                >
-                  <div
-                    className="w-80 h-80 rounded-full"
-                    style={{
-                      background: "radial-gradient(ellipse, rgba(0,0,0,0.02) 0%, transparent 70%)",
-                    }}
-                  />
-                </div>
-
-                {/* Logo card */}
-                <div
-                  className="relative z-10 rounded-2xl p-8 flex items-center justify-center mb-8 w-full max-w-xs"
-                  style={{
-                    background: "rgba(0,0,0,0.02)",
-                    border: "1px solid rgba(0,0,0,0.05)",
-                  }}
-                >
-                  <img
-                    src="https://india.boilerworldexpo.com/wp-content/uploads/2025/06/BI26-tentative-logo.png"
-                    alt="Boiler India 2026"
-                    className="w-full object-contain max-h-36"
-                  />
-                </div>
-
-                {/* Stat chips */}
-                <div className="relative z-10 grid grid-cols-2 gap-3 w-full max-w-xs">
-                  {[
-                    { value: "3", label: "Days" },
-                    { value: "500+", label: "Exhibitors" },
-                    { value: "10K+", label: "Visitors Expected" },
-                    { value: "Oct '26", label: "Next Edition" },
-                  ].map((s) => (
-                    <div
-                      key={s.label}
-                      className="rounded-xl px-4 py-3 text-center"
-                      style={{
-                        background: "rgba(0,0,0,0.02)",
-                        border: "1px solid rgba(0,0,0,0.05)",
-                      }}
-                    >
-                      <p
-                        className="text-xl font-black mb-0.5"
-                        style={{ color: "#000" }}
-                      >
-                        {s.value}
-                      </p>
-                      <p className="text-[10px] uppercase tracking-wider" style={{ color: "rgba(0,0,0,0.5)" }}>
-                        {s.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          <div className="rounded-3xl border border-dashed border-border bg-card/40 p-10 md:p-14 text-center max-w-xl mx-auto shadow-sm">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4 text-primary">
+              <Calendar size={24} />
             </div>
-
-            {/* Bottom shimmer */}
-            <div
-              className="h-px w-full"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(201,169,97,0.3), transparent)" }}
-            />
+            <h3 className="text-xl font-bold text-foreground mb-2">No Upcoming Events Right Now</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              We regularly showcase our heating solutions at premier industry expos and trade fairs across India and worldwide. Stay tuned for our future event announcements!
+            </p>
           </div>
         </div>
       </section>
@@ -252,36 +101,183 @@ export function Blogs() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { img: "/images/exhibitions/e10.jpg", title: "Industrial Expo Ankleshwar 2022" },
-              { img: "/images/exhibitions/e9.jpg", title: "Dahej Industrial Expo 2021" },
-              { img: "/images/exhibitions/e1.webp", title: "IFEX 2020 : Tamil Nadu" },
-              { img: "/images/exhibitions/e3.webp", title: "IFEX 2020 : Tamil Nadu" },
-              { img: "/images/exhibitions/e4.jpg", title: "IFEX 2020 : Tamil Nadu" },
-              { img: "/images/exhibitions/e5.jpg", title: "IFEX 2019 : NOIDA" },
-              { img: "/images/exhibitions/e7.jpg", title: "IFEX 2017 : GANDHINAGAR" },
-              { img: "/images/exhibitions/e8.jpg", title: "ELECRAMA 2016 : BANGLORE" },
-            ].map((expo, idx) => (
-              <div 
-                key={idx}
-                className="group relative rounded-2xl overflow-hidden border border-border bg-card/60 hover:bg-card hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/5 flex flex-col"
-              >
-                <div className="aspect-[16/11] w-full overflow-hidden bg-secondary/50 p-2 flex items-center justify-center">
-                  <img 
-                    src={expo.img} 
-                    alt={expo.title} 
-                    className="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
+            {/* ── Single Boiler India 2026 Card with Carousel ── */}
+            <div 
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+              onClick={() => setLightboxIdx(boilerSlide)}
+              className="group relative rounded-2xl overflow-hidden border border-border bg-card/60 hover:bg-card hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/10 flex flex-col cursor-pointer"
+            >
+              <div className="aspect-[16/11] w-full overflow-hidden bg-white p-3 flex items-center justify-center relative select-none">
+                <img 
+                  src={boilerImages[boilerSlide].img} 
+                  alt="Boiler India 2026 : Navi Mumbai" 
+                  className="w-full h-full object-contain rounded-lg transition-transform duration-500 group-hover:scale-[1.03]"
+                  loading="lazy"
+                />
+
+                {/* Photo Count Badge */}
+                <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-xs text-white text-[11px] font-medium flex items-center gap-1.5 shadow-sm">
+                  <Images size={12} className="text-primary" />
+                  <span>{boilerSlide + 1} / {boilerImages.length}</span>
                 </div>
-                <div className="p-5 text-center border-t border-border/50 bg-card/40 flex-1 flex items-center justify-center">
-                  <h3 className="font-semibold text-foreground text-base leading-snug group-hover:text-primary transition-colors">{expo.title}</h3>
+
+                {/* Left Arrow */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setBoilerSlide((prev) => (prev > 0 ? prev - 1 : boilerImages.length - 1));
+                  }}
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all opacity-80 group-hover:opacity-100 hover:scale-110 shadow-md"
+                  title="Previous photo"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+
+                {/* Right Arrow */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setBoilerSlide((prev) => (prev < boilerImages.length - 1 ? prev + 1 : 0));
+                  }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all opacity-80 group-hover:opacity-100 hover:scale-110 shadow-md"
+                  title="Next photo"
+                >
+                  <ChevronRight size={16} />
+                </button>
+
+                {/* Dot Indicators */}
+                <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 bg-black/40 backdrop-blur-xs px-2.5 py-1 rounded-full">
+                  {boilerImages.map((_, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setBoilerSlide(idx);
+                      }}
+                      className={`h-1.5 rounded-full transition-all ${
+                        boilerSlide === idx ? "w-4 bg-primary" : "w-1.5 bg-white/60 hover:bg-white"
+                      }`}
+                      title={`Photo ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Hover Zoom Icon */}
+                <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                  <span className="bg-black/70 text-white rounded-full p-2.5 shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
+                    <ZoomIn size={18} />
+                  </span>
                 </div>
               </div>
-            ))}
+
+              <div className="p-5 text-center border-t border-border/50 bg-card/40 flex-1 flex flex-col items-center justify-center gap-1">
+                <h3 className="font-semibold text-foreground text-base leading-snug group-hover:text-primary transition-colors">
+                  Boiler India 2026 : Navi Mumbai
+                </h3>
+                <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+                  <span>📸 4 photos · Click to view full size</span>
+                </p>
+              </div>
+            </div>
+
+            {/* ── Other Past Exhibitions ── */}
+            {pastExhibitions.map((expo, idx) => {
+              const globalIdx = boilerImages.length + idx;
+              return (
+                <div 
+                  key={expo.title + idx}
+                  onClick={() => setLightboxIdx(globalIdx)}
+                  className="group relative rounded-2xl overflow-hidden border border-border bg-card/60 hover:bg-card hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/10 flex flex-col cursor-pointer"
+                >
+                  <div className="aspect-[16/11] w-full overflow-hidden bg-white p-3 flex items-center justify-center relative">
+                    <img 
+                      src={expo.img} 
+                      alt={expo.title} 
+                      className="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                      <span className="bg-black/70 text-white rounded-full p-2.5 shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
+                        <ZoomIn size={18} />
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-5 text-center border-t border-border/50 bg-card/40 flex-1 flex items-center justify-center">
+                    <h3 className="font-semibold text-foreground text-base leading-snug group-hover:text-primary transition-colors">{expo.title}</h3>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
+
+      {/* ── Lightbox Modal ── */}
+      {lightboxIdx !== null && (
+        <div 
+          className="fixed inset-0 z-[600] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200"
+          onClick={() => setLightboxIdx(null)}
+        >
+          {/* Close button */}
+          <button 
+            onClick={() => setLightboxIdx(null)}
+            className="absolute top-5 right-5 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shadow-lg"
+            title="Close (Esc)"
+          >
+            <X size={20} />
+          </button>
+
+          {/* Previous button */}
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              setLightboxIdx((prev) => (prev! > 0 ? prev! - 1 : allGalleryItems.length - 1));
+            }}
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors shadow-lg"
+            title="Previous (Left Arrow)"
+          >
+            <ChevronLeft size={24} />
+          </button>
+
+          {/* Next button */}
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              setLightboxIdx((prev) => (prev! < allGalleryItems.length - 1 ? prev! + 1 : 0));
+            }}
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors shadow-lg"
+            title="Next (Right Arrow)"
+          >
+            <ChevronRight size={24} />
+          </button>
+
+          {/* Modal Content */}
+          <div 
+            className="max-w-4xl w-full max-h-[90vh] flex flex-col items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative w-full max-h-[75vh] flex items-center justify-center rounded-2xl overflow-hidden bg-black/40 p-2">
+              <img 
+                src={allGalleryItems[lightboxIdx].img} 
+                alt={allGalleryItems[lightboxIdx].title} 
+                className="max-h-[72vh] max-w-full object-contain rounded-xl shadow-2xl"
+              />
+            </div>
+            <div className="mt-4 text-center">
+              <p className="text-white text-lg font-semibold tracking-wide">
+                {allGalleryItems[lightboxIdx].title}
+              </p>
+              <p className="text-white/60 text-xs mt-1">
+                {lightboxIdx + 1} of {allGalleryItems.length}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
